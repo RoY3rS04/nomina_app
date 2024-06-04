@@ -1,13 +1,7 @@
-﻿using Microsoft.Identity.Client;
-using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PlanillaSalarial.Models
+namespace SharedModels
 {
     public class Empleado
     {
@@ -25,7 +19,7 @@ namespace PlanillaSalarial.Models
         public string Direccion { get; set; }
         public string Telefono { get; set; }
 
-        public string Celular {  get; set; }
+        public string Celular { get; set; }
         public DateTime FechaContratacion { get; set; }
 
         public DateTime FechaTerminacion { get; set; }
@@ -38,6 +32,5 @@ namespace PlanillaSalarial.Models
         public virtual ICollection<Deducciones> Deducciones { get; set; } = new List<Deducciones>();
         [InverseProperty("Empleado")]
         public virtual ICollection<Nomina> Nominas { get; set; } = new List<Nomina>();
-        
     }
 }

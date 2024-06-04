@@ -1,0 +1,6 @@
+@NominaAPI_HostAddress = http://localhost:5220
+
+GET {{NominaAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

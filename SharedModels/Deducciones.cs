@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlanillaSalarial.Models
+namespace SharedModels
 {
-    public class Nomina
+    public class Deducciones
     {
         [Key]
         [Column("Id")]
@@ -16,11 +16,14 @@ namespace PlanillaSalarial.Models
 
         [Column("EmpleadoId")]
         public int EmpleadoId { get; set; }
+        public double SalarioBruto { get; set; }
+        public double Prestamos { get; set; }
+        public double IR { get; set; }
 
-        public DateTime FechaRealizacion { get; set; }
+        public double Anticipos { get; set; }
 
         [ForeignKey("EmpleadoId")]
-        [InverseProperty("Nominas")]
+        [InverseProperty("Deducciones")]
         public virtual Empleado Empleado { get; set; }
     }
 }
