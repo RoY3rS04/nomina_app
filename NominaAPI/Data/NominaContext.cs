@@ -11,6 +11,8 @@ namespace NominaAPI.Data
         public DbSet<Ingresos> Ingresos { get; set; }
         public DbSet<Deducciones> Deducciones { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
         public NominaContext(DbContextOptions<NominaContext> options): base(options)
         {
 
