@@ -7,7 +7,7 @@ namespace SharedModels
     {
         [Key]
         public int Id { get; set; }
-        public int CodigoEmpleado { get; set; }
+        public string CodigoEmpleado { get; set; }
         public string Cedula { get; set; }
         public string NumeroRUC { get; set; }
         public string NumeroINSS { get; set; }
@@ -24,7 +24,7 @@ namespace SharedModels
 
         public DateTime FechaTerminacion { get; set; }
         public string Cargo { get; set; }
-        public string Estado { get; set; }
+        public bool Estado { get; set; }
 
         [InverseProperty("Empleado")]
         public virtual ICollection<Ingresos> Ingresos { get; set; } = new List<Ingresos>();

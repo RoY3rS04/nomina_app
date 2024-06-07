@@ -5,6 +5,8 @@ namespace NominaAPI.Helpers
 {
     using BCrypt.Net;
     using Bogus;
+    using Microsoft.EntityFrameworkCore;
+    using NominaAPI.DbSeed.Fakers;
 
     public class Seeder
     {
@@ -34,14 +36,32 @@ namespace NominaAPI.Helpers
 
         public Seeder(NominaContext context) { _context = context; }
 
-        public void SeedDB()
+        public async Task SeedDB()
         {
-            foreach (var user in _users)
+            /*foreach (var user in _users)
             {
                 _context.Users.Add(user);
-            }
-            
+            }*/
+
             //TODO Generate fake data    
+            for(int i = 0; i< 10; i++)
+            {
+                var empleadoFaker = new EmpleadoFaker();
+                _context.Empleados.Add(empleadoFaker.Generate());
+            }
+
+            await _context.SaveChangesAsync();
+
+            foreach(var empleado in _context.Empleados)
+            {
+                var ingresosFaker = new IngresosFaker(empleado.Id);
+                foreach (var ingresos in ingresosFaker.Generate(5).ToList())
+                {
+                    _context.Ingresos.Add(ingresos);
+                };
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }
