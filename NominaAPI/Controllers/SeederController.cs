@@ -11,18 +11,27 @@ namespace NominaAPI.Controllers
     {
 
         private NominaContext _context;
+        private Seeder _seeder;
 
         public SeederController(NominaContext context)
         {
             _context = context;
+            _seeder = new Seeder(_context);
         }
 
         [HttpPost]
         public async Task<IActionResult> SeedDb()
         {
-            Seeder seeder = new Seeder(_context);
 
-            await seeder.SeedDB();
+            await _seeder.SeedDB();
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> ClearDb()
+        {
+            await _seeder.ClearDB();
 
             return Ok();
         }

@@ -22,7 +22,7 @@ namespace SharedModels
         public string Celular { get; set; }
         public DateTime FechaContratacion { get; set; }
 
-        public DateTime FechaTerminacion { get; set; }
+        public DateTime? FechaTerminacion { get; set; } = null;
         public string Cargo { get; set; }
         public bool Estado { get; set; }
 

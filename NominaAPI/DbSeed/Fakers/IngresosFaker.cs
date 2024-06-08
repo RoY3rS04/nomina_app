@@ -18,6 +18,10 @@ namespace NominaAPI.DbSeed.Fakers
             RuleFor(i => i.HorasExtras, new Randomizer().Number(0, 100));
             RuleFor(i => i.Viatico, f => Convert.ToDouble(f.Finance.Amount(0, 2000)));
             RuleFor(i => i.Nocturnidad, new Randomizer().Bool());
+            RuleFor(i => i.FechaCierre, f => f.Date.Between(
+                DateTime.Parse($"01/01/{DateTime.Now.Year}"),
+                DateTime.Now
+            ));
         }
     }
 }

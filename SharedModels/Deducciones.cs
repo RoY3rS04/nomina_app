@@ -22,6 +22,8 @@ namespace SharedModels
 
         public double Anticipos { get; set; }
 
+        public DateTime FechaCierre { get; set; }
+
         [ForeignKey("EmpleadoId")]
         [InverseProperty("Deducciones")]
         public virtual Empleado Empleado { get; set; }

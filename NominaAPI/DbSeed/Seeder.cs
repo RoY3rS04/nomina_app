@@ -54,14 +54,40 @@ namespace NominaAPI.Helpers
 
             foreach(var empleado in _context.Empleados)
             {
+                //TODO REFACTORING
                 var ingresosFaker = new IngresosFaker(empleado.Id);
-                foreach (var ingresos in ingresosFaker.Generate(5).ToList())
-                {
-                    _context.Ingresos.Add(ingresos);
-                };
+
+                var resultIngresos = ingresosFaker.Generate(3);
+
+                _context.Ingresos.AddRange(resultIngresos);
+
+                var deduccionesFaker = new DeduccionesFaker(empleado.Id);
+
+                var resultDeducciones = deduccionesFaker.Generate(3);
+
+                _context.Deducciones.AddRange(resultDeducciones);
+
+                var nominaFaker = new NominaFaker(empleado.Id);
+
+                var result = nominaFaker.Generate(3);
+
+                _context.Nominas.AddRange(result);
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task ClearDB()
+        {
+            await _context.Ingresos.ExecuteDeleteAsync();
+            await _context.Deducciones.ExecuteDeleteAsync();
+            await _context.Nominas.ExecuteDeleteAsync();
+            await _context.Empleados.ExecuteDeleteAsync();
+        }
+
+        public async Task Generate<Entity>() where Entity: class, new()
+        {
+            //TODO
         }
     }
 }

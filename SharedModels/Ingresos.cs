@@ -29,6 +29,8 @@ namespace SharedModels
         public double Comision { get; set; }
         public double Bonos { get; set; }
 
+        public DateTime FechaCierre { get; set; }
+
         [ForeignKey("EmpleadoId")]
         [InverseProperty("Ingresos")]
         public virtual Empleado Empleado { get; set; }
