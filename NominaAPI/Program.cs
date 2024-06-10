@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using NominaAPI;
 using NominaAPI.Data;
+using NominaAPI.Repository;
+using SharedModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +11,10 @@ builder.Services.AddDbContext<NominaContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
+
+builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+builder.Services.AddScoped<Repository<User>>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
