@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NominaAPI.DTOs;
 using NominaAPI.Repository;
@@ -12,11 +13,12 @@ namespace NominaAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly Repository<User> _userRepository;
-        private readonly AuthService _authService = new AuthService();
+        private readonly AuthService _authService;
 
         public AuthController(Repository<User> userRepository)
         {
             _userRepository = userRepository;
+            _authService = new AuthService(_userRepository);
         }
 
         [HttpPost]
@@ -28,29 +30,27 @@ namespace NominaAPI.Controllers
         public async Task<ActionResult<User>> LoginUser(LoginUserDto loginDto)
         {
 
-            if(loginDto == null)
+            var result = await _authService.Login(loginDto);
+
+            return SendStatus(result.response);
+
+        }
+
+        private ObjectResult? SendStatus((int status, string msg) response)
+        {
+            switch (response.status)
             {
-                return BadRequest("Invalid or insuficient data");
-            }
-
-            try
-            {
-                var user = await _userRepository.GetAsync(u => u.Email == loginDto.Email);
-
-                if (user == null)
-                {
-                    return NotFound("User not found or (invalid credentials)");
-                }
-
-                if (!await _authService.Login(loginDto, user.Password))
-                {
-                    return Unauthorized("Invalid Credentials");
-                }
-
-                return Ok("Authenticated sucessfully!");
-            } catch(Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong");
+                case StatusCodes.Status200OK:
+                    return Ok(response.msg);
+                case StatusCodes.Status400BadRequest:
+                    return BadRequest(response.msg);
+                case StatusCodes.Status404NotFound:
+                    return NotFound(response.msg);
+                case StatusCodes.Status401Unauthorized:
+                    return Unauthorized(response.msg);
+                case StatusCodes.Status500InternalServerError:
+                    return StatusCode(response.status, response.msg);
+                default: return null;
             }
         }
     }
