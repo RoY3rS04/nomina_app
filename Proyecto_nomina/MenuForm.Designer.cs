@@ -33,6 +33,7 @@
             pnlContenedor = new Panel();
             pnlContenedorForm = new Panel();
             pnlMenu = new Panel();
+            btnRegistroUsuarioForm = new Button();
             btnAyuda = new Button();
             btnReportes = new Button();
             btnRegistroNominaForm = new Button();
@@ -74,6 +75,7 @@
             // pnlMenu
             // 
             pnlMenu.BackColor = Color.FromArgb(29, 34, 39);
+            pnlMenu.Controls.Add(btnRegistroUsuarioForm);
             pnlMenu.Controls.Add(btnAyuda);
             pnlMenu.Controls.Add(btnReportes);
             pnlMenu.Controls.Add(btnRegistroNominaForm);
@@ -84,6 +86,28 @@
             pnlMenu.Name = "pnlMenu";
             pnlMenu.Size = new Size(230, 499);
             pnlMenu.TabIndex = 3;
+            // 
+            // btnRegistroUsuarioForm
+            // 
+            btnRegistroUsuarioForm.Cursor = Cursors.Hand;
+            btnRegistroUsuarioForm.FlatAppearance.BorderSize = 0;
+            btnRegistroUsuarioForm.FlatAppearance.MouseDownBackColor = Color.FromArgb(64, 69, 76);
+            btnRegistroUsuarioForm.FlatAppearance.MouseOverBackColor = Color.FromArgb(38, 45, 53);
+            btnRegistroUsuarioForm.FlatStyle = FlatStyle.Flat;
+            btnRegistroUsuarioForm.Font = new Font("Segoe UI", 12F);
+            btnRegistroUsuarioForm.ForeColor = Color.Silver;
+            btnRegistroUsuarioForm.Image = (Image)resources.GetObject("btnRegistroUsuarioForm.Image");
+            btnRegistroUsuarioForm.ImageAlign = ContentAlignment.MiddleLeft;
+            btnRegistroUsuarioForm.Location = new Point(-6, 61);
+            btnRegistroUsuarioForm.Margin = new Padding(3, 2, 3, 2);
+            btnRegistroUsuarioForm.Name = "btnRegistroUsuarioForm";
+            btnRegistroUsuarioForm.Size = new Size(238, 57);
+            btnRegistroUsuarioForm.TabIndex = 7;
+            btnRegistroUsuarioForm.Text = "   Registro de Usuario";
+            btnRegistroUsuarioForm.TextAlign = ContentAlignment.MiddleLeft;
+            btnRegistroUsuarioForm.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnRegistroUsuarioForm.UseVisualStyleBackColor = true;
+            btnRegistroUsuarioForm.Click += btnRegistroUsuarioForm_Click;
             // 
             // btnAyuda
             // 
@@ -117,7 +141,7 @@
             btnReportes.ForeColor = Color.Silver;
             btnReportes.Image = (Image)resources.GetObject("btnReportes.Image");
             btnReportes.ImageAlign = ContentAlignment.MiddleLeft;
-            btnReportes.Location = new Point(-6, 173);
+            btnReportes.Location = new Point(-6, 245);
             btnReportes.Margin = new Padding(3, 2, 3, 2);
             btnReportes.Name = "btnReportes";
             btnReportes.Size = new Size(235, 58);
@@ -139,7 +163,7 @@
             btnRegistroNominaForm.ForeColor = Color.Silver;
             btnRegistroNominaForm.Image = (Image)resources.GetObject("btnRegistroNominaForm.Image");
             btnRegistroNominaForm.ImageAlign = ContentAlignment.MiddleLeft;
-            btnRegistroNominaForm.Location = new Point(-5, 111);
+            btnRegistroNominaForm.Location = new Point(-5, 183);
             btnRegistroNominaForm.Margin = new Padding(3, 2, 3, 2);
             btnRegistroNominaForm.Name = "btnRegistroNominaForm";
             btnRegistroNominaForm.Size = new Size(235, 58);
@@ -161,7 +185,7 @@
             btnRegistroEmpleadoForm.ForeColor = Color.Silver;
             btnRegistroEmpleadoForm.Image = (Image)resources.GetObject("btnRegistroEmpleadoForm.Image");
             btnRegistroEmpleadoForm.ImageAlign = ContentAlignment.MiddleRight;
-            btnRegistroEmpleadoForm.Location = new Point(1, 50);
+            btnRegistroEmpleadoForm.Location = new Point(1, 122);
             btnRegistroEmpleadoForm.Margin = new Padding(3, 2, 3, 2);
             btnRegistroEmpleadoForm.Name = "btnRegistroEmpleadoForm";
             btnRegistroEmpleadoForm.Size = new Size(229, 57);
@@ -292,5 +316,6 @@
         private Button btnRegistroNominaForm;
         private Button btnReportes;
         private Button btnAyuda;
+        private Button btnRegistroUsuarioForm;
     }
 }
