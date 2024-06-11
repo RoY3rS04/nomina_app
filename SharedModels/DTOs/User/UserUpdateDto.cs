@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace NominaAPI.DTOs.User
+namespace SharedModels.DTOs.User
 {
     public class UserUpdateDto
     {
@@ -12,8 +12,8 @@ namespace NominaAPI.DTOs.User
         [StringLength(50)]
         public string? Email { get; set; }
 
-        [StringLength(50)]
-        public string? ActualPassword { get; set; }
+        [StringLength(50), Required]
+        public string ActualPassword { get; set; }
 
         [StringLength(50)]
         public string? NewPassword { get; set; }

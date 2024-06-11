@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.Data;
-using NominaAPI.DTOs;
+using SharedModels.DTOs;
 using NominaAPI.Repository;
 using SharedModels;
 

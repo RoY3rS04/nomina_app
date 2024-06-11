@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using NominaAPI.DTOs;
+using SharedModels.DTOs;
 using NominaAPI.Repository;
 using NominaAPI.Services;
 using SharedModels;
