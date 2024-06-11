@@ -27,5 +27,8 @@ namespace SharedModels
         [ForeignKey("EmpleadoId")]
         [InverseProperty("Deducciones")]
         public virtual Empleado Empleado { get; set; }
+
+        [InverseProperty("Deducciones")]
+        public virtual Nomina Nomina { get; set; }
     }
 }

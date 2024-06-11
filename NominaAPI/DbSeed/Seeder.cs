@@ -43,12 +43,8 @@ namespace NominaAPI.Helpers
                 _context.Users.Add(user);
             }*/
 
-            //TODO Generate fake data    
-            for(int i = 0; i< 10; i++)
-            {
-                var empleadoFaker = new EmpleadoFaker();
-                _context.Empleados.Add(empleadoFaker.Generate());
-            }
+            var empleadoFaker = new EmpleadoFaker();
+            _context.Empleados.AddRange(empleadoFaker.Generate(10));
 
             await _context.SaveChangesAsync();
 
@@ -67,11 +63,11 @@ namespace NominaAPI.Helpers
 
                 _context.Deducciones.AddRange(resultDeducciones);
 
-                var nominaFaker = new NominaFaker(empleado.Id);
+                //var nominaFaker = new NominaFaker(empleado.Id);
 
-                var result = nominaFaker.Generate(3);
+                //var result = nominaFaker.Generate(3);
 
-                _context.Nominas.AddRange(result);
+                //_context.Nominas.AddRange(result);
             }
 
             await _context.SaveChangesAsync();
@@ -85,9 +81,32 @@ namespace NominaAPI.Helpers
             await _context.Empleados.ExecuteDeleteAsync();
         }
 
-        public async Task Generate<Entity>() where Entity: class, new()
+        public async Task Generate<EntityFaker>
+        (
+            int empleadoId,
+            int? ingresosId,
+            int? deduccionesId
+        ) where EntityFaker : class, new()
         {
             //TODO
+
+            if (typeof(IngresosFaker).IsEquivalentTo(typeof(EntityFaker)))
+            {
+                var faker = new IngresosFaker(empleadoId);
+
+                var resultFaker = faker.Generate(3);
+
+                _context.Ingresos.AddRange(resultFaker);
+            } else if (typeof(Deducciones).IsEquivalentTo(typeof(EntityFaker)))
+            {
+                var faker = new DeduccionesFaker(empleadoId);
+
+                var resultFaker = faker.Generate(3);
+
+                _context.Deducciones.AddRange(resultFaker);
+            } else
+            {
+            }
         }
     }
 }

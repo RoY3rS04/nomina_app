@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NominaAPI.Data;
 
@@ -11,9 +12,11 @@ using NominaAPI.Data;
 namespace NominaAPI.Migrations
 {
     [DbContext(typeof(NominaContext))]
-    partial class NominaContextModelSnapshot : ModelSnapshot
+    [Migration("20240611040637_updating_nominas_table")]
+    partial class updating_nominas_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
