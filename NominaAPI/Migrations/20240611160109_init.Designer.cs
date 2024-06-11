@@ -12,8 +12,8 @@ using NominaAPI.Data;
 namespace NominaAPI.Migrations
 {
     [DbContext(typeof(NominaContext))]
-    [Migration("20240606033233_users_table")]
-    partial class users_table
+    [Migration("20240611160109_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,9 @@ namespace NominaAPI.Migrations
                     b.Property<int>("EmpleadoId")
                         .HasColumnType("int")
                         .HasColumnName("EmpleadoId");
+
+                    b.Property<DateTime>("FechaCierre")
+                        .HasColumnType("datetime2");
 
                     b.Property<double>("IR")
                         .HasColumnType("float");
@@ -77,16 +80,16 @@ namespace NominaAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CodigoEmpleado")
-                        .HasColumnType("int");
+                    b.Property<string>("CodigoEmpleado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
 
                     b.Property<string>("EstadoCivil")
                         .IsRequired()
@@ -95,7 +98,7 @@ namespace NominaAPI.Migrations
                     b.Property<DateTime>("FechaContratacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaTerminacion")
+                    b.Property<DateTime?>("FechaTerminacion")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Nacimento")
@@ -155,6 +158,9 @@ namespace NominaAPI.Migrations
                         .HasColumnType("int")
                         .HasColumnName("EmpleadoId");
 
+                    b.Property<DateTime>("FechaCierre")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("HorasExtras")
                         .HasColumnType("int");
 
@@ -186,6 +192,10 @@ namespace NominaAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("DeduccionesId")
+                        .HasColumnType("int")
+                        .HasColumnName("DeduccionesId");
+
                     b.Property<int>("EmpleadoId")
                         .HasColumnType("int")
                         .HasColumnName("EmpleadoId");
@@ -193,9 +203,19 @@ namespace NominaAPI.Migrations
                     b.Property<DateTime>("FechaRealizacion")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("IngresosId")
+                        .HasColumnType("int")
+                        .HasColumnName("IngresosId");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("DeduccionesId")
+                        .IsUnique();
+
                     b.HasIndex("EmpleadoId");
+
+                    b.HasIndex("IngresosId")
+                        .IsUnique();
 
                     b.ToTable("Nominas");
                 });
@@ -249,13 +269,35 @@ namespace NominaAPI.Migrations
 
             modelBuilder.Entity("SharedModels.Nomina", b =>
                 {
+                    b.HasOne("SharedModels.Deducciones", "Deducciones")
+                        .WithOne("Nomina")
+                        .HasForeignKey("SharedModels.Nomina", "DeduccionesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SharedModels.Empleado", "Empleado")
                         .WithMany("Nominas")
                         .HasForeignKey("EmpleadoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SharedModels.Ingresos", "Ingresos")
+                        .WithOne("Nomina")
+                        .HasForeignKey("SharedModels.Nomina", "IngresosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Deducciones");
+
                     b.Navigation("Empleado");
+
+                    b.Navigation("Ingresos");
+                });
+
+            modelBuilder.Entity("SharedModels.Deducciones", b =>
+                {
+                    b.Navigation("Nomina")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SharedModels.Empleado", b =>
@@ -265,6 +307,12 @@ namespace NominaAPI.Migrations
                     b.Navigation("Ingresos");
 
                     b.Navigation("Nominas");
+                });
+
+            modelBuilder.Entity("SharedModels.Ingresos", b =>
+                {
+                    b.Navigation("Nomina")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

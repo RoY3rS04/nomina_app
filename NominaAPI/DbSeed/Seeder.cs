@@ -38,36 +38,37 @@ namespace NominaAPI.Helpers
 
         public async Task SeedDB()
         {
-            /*foreach (var user in _users)
+            if(_context.Users.Count() == 0)
             {
-                _context.Users.Add(user);
-            }*/
+                foreach (var user in _users)
+                {
+                    _context.Users.Add(user);
+                }
+            }
 
             var empleadoFaker = new EmpleadoFaker();
             _context.Empleados.AddRange(empleadoFaker.Generate(10));
 
             await _context.SaveChangesAsync();
 
+            List<Ingresos> ingresos = new List<Ingresos>();
+            List<Deducciones> deducciones = new List<Deducciones>();
+
             foreach(var empleado in _context.Empleados)
             {
                 //TODO REFACTORING
-                var ingresosFaker = new IngresosFaker(empleado.Id);
+                ingresos = Generate<IngresosFaker, Ingresos>(empleado.Id);
+                deducciones = Generate<DeduccionesFaker, Deducciones>(empleado.Id);
+            }
 
-                var resultIngresos = ingresosFaker.Generate(3);
+            await _context.SaveChangesAsync();
 
-                _context.Ingresos.AddRange(resultIngresos);
-
-                var deduccionesFaker = new DeduccionesFaker(empleado.Id);
-
-                var resultDeducciones = deduccionesFaker.Generate(3);
-
-                _context.Deducciones.AddRange(resultDeducciones);
-
-                //var nominaFaker = new NominaFaker(empleado.Id);
-
-                //var result = nominaFaker.Generate(3);
-
-                //_context.Nominas.AddRange(result);
+            foreach(var empleado in _context.Empleados)
+            {
+                for (int i = 0; i < ingresos.Count; i++)
+                {
+                    Generate<NominaFaker, Nomina>(empleado.Id, ingresos[i].Id, deducciones[i].Id);
+                }
             }
 
             await _context.SaveChangesAsync();
@@ -81,12 +82,13 @@ namespace NominaAPI.Helpers
             await _context.Empleados.ExecuteDeleteAsync();
         }
 
-        public async Task Generate<EntityFaker>
+        public List<T> Generate<EntityFaker, T>
         (
             int empleadoId,
-            int? ingresosId,
-            int? deduccionesId
-        ) where EntityFaker : class, new()
+            int? ingresosId = null,
+            int? deduccionesId = null
+        ) where EntityFaker : class
+            where T : class
         {
             //TODO
 
@@ -97,15 +99,30 @@ namespace NominaAPI.Helpers
                 var resultFaker = faker.Generate(3);
 
                 _context.Ingresos.AddRange(resultFaker);
-            } else if (typeof(Deducciones).IsEquivalentTo(typeof(EntityFaker)))
+
+                return resultFaker as List<T>;
+            } else if (typeof(DeduccionesFaker).IsEquivalentTo(typeof(EntityFaker)))
             {
                 var faker = new DeduccionesFaker(empleadoId);
 
                 var resultFaker = faker.Generate(3);
 
                 _context.Deducciones.AddRange(resultFaker);
+
+                return resultFaker as List<T>;
             } else
             {
+                if (ingresosId != null && deduccionesId != null) {
+                    var faker = new NominaFaker(empleadoId, (int)ingresosId, (int)deduccionesId);
+
+                    var resultFaker = faker.Generate(3);
+
+                    _context.Nominas.AddRange(resultFaker);
+
+                    return resultFaker as List<T>;
+                }
+
+                return null;
             }
         }
     }
