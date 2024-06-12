@@ -30,28 +30,10 @@ namespace NominaAPI.Controllers
         public async Task<ActionResult<User>> LoginUser(LoginUserDto loginDto)
         {
 
-            var result = await _authService.Login(loginDto);
+            var response = await _authService.Login(loginDto);
 
-            return SendStatus(result.response);
+            return response.SendResponse(this);
 
-        }
-
-        private ObjectResult? SendStatus((int status, string msg) response)
-        {
-            switch (response.status)
-            {
-                case StatusCodes.Status200OK:
-                    return Ok(response.msg);
-                case StatusCodes.Status400BadRequest:
-                    return BadRequest(response.msg);
-                case StatusCodes.Status404NotFound:
-                    return NotFound(response.msg);
-                case StatusCodes.Status401Unauthorized:
-                    return Unauthorized(response.msg);
-                case StatusCodes.Status500InternalServerError:
-                    return StatusCode(response.status, response.msg);
-                default: return null;
-            }
         }
     }
 }

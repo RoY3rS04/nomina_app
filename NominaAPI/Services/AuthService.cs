@@ -7,6 +7,7 @@ namespace NominaAPI.Services
 {
     using BCrypt.Net;
     using Microsoft.AspNetCore.Mvc;
+    using NominaAPI.Http.Responses;
 
     public class AuthService
     {
@@ -18,16 +19,16 @@ namespace NominaAPI.Services
             _userRepository = userRepository;
         }
 
-        //TODO: CHANGE FROM TUPLES TO CLASS
-        public async Task<(User? user, (int status, string msg) response)> Login(LoginUserDto loginDto)
+        public async Task<UserResponse> Login(LoginUserDto loginDto)
         {
 
             if(loginDto == null)
             {
-                return (
-                    null,
-                    (StatusCodes.Status400BadRequest, "Invalid or insuficient data")
-                );
+                return new UserResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Invalid or insuficient data"
+                };
             }
 
             try
@@ -36,31 +37,36 @@ namespace NominaAPI.Services
 
                 if (user == null)
                 {
-                    return (
-                        null,
-                        (StatusCodes.Status404NotFound, "User with those credentials does'nt exists")
-                    );
+                    return new UserResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "User with those credentials does'nt exists"
+                    };
                 }
 
                 if (!BCrypt.Verify(loginDto.Password, user.Password))
                 {
-                    return (
-                        null,
-                        (StatusCodes.Status401Unauthorized, "Invalid credentials")
-                    );
+                    return new UserResponse
+                    {
+                        StatusCode = StatusCodes.Status401Unauthorized,
+                        Message = "Invalid Credentials"
+                    };
                 }
 
-                return (
-                    user,
-                    (StatusCodes.Status200OK, "Authenticated Successfully")
-                );
+                return new UserResponse
+                {
+                    User = user,
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Authenticated successfully!"
+                };
             }
             catch (Exception ex)
             {
-                return (
-                    null,
-                    (StatusCodes.Status500InternalServerError, "Something went wrong")
-                );
+                return new UserResponse
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError,
+                    Message = "Something went wrong"
+                };
             }
         }
     }
