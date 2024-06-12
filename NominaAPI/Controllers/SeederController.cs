@@ -19,21 +19,37 @@ namespace NominaAPI.Controllers
             _seeder = new Seeder(_context);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
         public async Task<IActionResult> SeedDb()
         {
 
-            await _seeder.SeedDB();
+            try
+            {
+                await _seeder.SeedDB();
 
-            return Ok();
+                return Ok("Database seeded sucessfully!");
+            } catch(Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong when seeding DB");
+            }
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete]
         public async Task<IActionResult> ClearDb()
         {
-            await _seeder.ClearDB();
+           try
+            {
+                await _seeder.ClearDB();
 
-            return Ok();
+                return Ok("Database cleared successfully!");
+            } catch(Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong when clearing DB");
+            }
         }
     }
 }

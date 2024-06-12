@@ -133,7 +133,7 @@ namespace NominaAPI.Migrations
                         column: x => x.EmpleadoId,
                         principalTable: "Empleados",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Nominas_Ingresos_IngresosId",
                         column: x => x.IngresosId,

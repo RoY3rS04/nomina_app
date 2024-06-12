@@ -34,7 +34,9 @@ namespace NominaAPI.Helpers
             },
         ];
 
-        public Seeder(NominaContext context) { _context = context; }
+        public Seeder(NominaContext context) {
+            _context = context; 
+        }
 
         public async Task SeedDB()
         {
@@ -51,23 +53,38 @@ namespace NominaAPI.Helpers
 
             await _context.SaveChangesAsync();
 
-            List<Ingresos> ingresos = new List<Ingresos>();
-            List<Deducciones> deducciones = new List<Deducciones>();
+            
 
             foreach(var empleado in _context.Empleados)
             {
                 //TODO REFACTORING
-                ingresos = Generate<IngresosFaker, Ingresos>(empleado.Id);
-                deducciones = Generate<DeduccionesFaker, Deducciones>(empleado.Id);
+                Generate<IngresosFaker, Ingresos>(empleado.Id);
+                Generate<DeduccionesFaker, Deducciones>(empleado.Id);
             }
 
             await _context.SaveChangesAsync();
 
-            foreach(var empleado in _context.Empleados)
+            List<Ingresos> ingresos = _context.Ingresos.ToList();
+            List<Deducciones> deducciones = _context.Deducciones.ToList();
+
+            foreach (var empleado in _context.Empleados)
             {
-                for (int i = 0; i < ingresos.Count; i++)
+
+                var ingresosEmpleado = ingresos.Where
+                    ((i) => i.EmpleadoId == empleado.Id).Select((ingresos,index) => (ingresos, index))
+                    .ToList();
+                var deduccionesEmpleado = deducciones.Where(d => d.EmpleadoId == empleado.Id).ToList();
+
+                List<(Ingresos, Deducciones)> data = new List<(Ingresos, Deducciones)>();
+
+                foreach( var info in ingresosEmpleado)
                 {
-                    Generate<NominaFaker, Nomina>(empleado.Id, ingresos[i].Id, deducciones[i].Id);
+                    data.Add((info.ingresos, deduccionesEmpleado[info.index]));
+                }
+
+                foreach (var (ingresosEmp, deduccionesEmp) in data)
+                {
+                    Generate<NominaFaker, Nomina>(empleado.Id, ingresosEmp.Id, deduccionesEmp.Id);
                 }
             }
 
@@ -76,9 +93,9 @@ namespace NominaAPI.Helpers
 
         public async Task ClearDB()
         {
+            await _context.Nominas.ExecuteDeleteAsync();
             await _context.Ingresos.ExecuteDeleteAsync();
             await _context.Deducciones.ExecuteDeleteAsync();
-            await _context.Nominas.ExecuteDeleteAsync();
             await _context.Empleados.ExecuteDeleteAsync();
         }
 

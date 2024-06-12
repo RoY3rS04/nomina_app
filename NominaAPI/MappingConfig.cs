@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using NominaAPI.DTOs;
+using SharedModels.DTOs;
 using SharedModels;
 
 namespace NominaAPI

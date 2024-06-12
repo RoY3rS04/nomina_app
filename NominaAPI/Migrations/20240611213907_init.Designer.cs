@@ -12,7 +12,7 @@ using NominaAPI.Data;
 namespace NominaAPI.Migrations
 {
     [DbContext(typeof(NominaContext))]
-    [Migration("20240611160109_init")]
+    [Migration("20240611213907_init")]
     partial class init
     {
         /// <inheritdoc />

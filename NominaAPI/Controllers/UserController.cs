@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NominaAPI.Data;
+using SharedModels;
 
 namespace NominaAPI.Controllers
 {
@@ -7,6 +9,6 @@ namespace NominaAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-
+        
     }
 }
