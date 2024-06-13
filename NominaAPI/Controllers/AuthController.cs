@@ -5,6 +5,7 @@ using SharedModels.DTOs;
 using NominaAPI.Repository;
 using NominaAPI.Services;
 using SharedModels;
+using AutoMapper;
 
 namespace NominaAPI.Controllers
 {
@@ -15,10 +16,10 @@ namespace NominaAPI.Controllers
         private readonly Repository<User> _userRepository;
         private readonly AuthService _authService;
 
-        public AuthController(Repository<User> userRepository)
+        public AuthController(Repository<User> userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
-            _authService = new AuthService(_userRepository);
+            _authService = new AuthService(_userRepository, mapper);
         }
 
         [HttpPost]
@@ -29,7 +30,7 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<User>> LoginUser(LoginUserDto loginDto)
         {
-
+           
             var response = await _authService.Login(loginDto);
 
             return response.SendResponse(this);

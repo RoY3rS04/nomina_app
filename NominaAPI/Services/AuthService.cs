@@ -5,18 +5,22 @@ using SharedModels;
 
 namespace NominaAPI.Services
 {
+    using AutoMapper;
     using BCrypt.Net;
     using Microsoft.AspNetCore.Mvc;
     using NominaAPI.Http.Responses;
+    using SharedModels.DTOs.User;
 
     public class AuthService
     {
 
         private readonly Repository<User> _userRepository;
+        private readonly IMapper _mapper;
 
-        public AuthService(Repository<User> userRepository)
+        public AuthService(Repository<User> userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         public async Task<UserResponse> Login(LoginUserDto loginDto)
@@ -53,9 +57,11 @@ namespace NominaAPI.Services
                     };
                 }
 
+
+
                 return new UserResponse
                 {
-                    User = user,
+                    User = _mapper.Map<UserDto>(user),
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Authenticated successfully!"
                 };

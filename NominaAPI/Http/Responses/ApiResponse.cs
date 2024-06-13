@@ -15,6 +15,8 @@ namespace NominaAPI.Http.Responses
             {
                 case StatusCodes.Status200OK:
                     return controller.Ok(this);
+                case StatusCodes.Status201Created:
+                    return controller.CreatedAtAction(null, this);
                 case StatusCodes.Status400BadRequest:
                     return controller.BadRequest(this);
                 case StatusCodes.Status404NotFound:
