@@ -13,6 +13,7 @@ builder.Services.AddDbContext<NominaContext>(options =>
 });
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+builder.Services.AddControllers().AddNewtonsoftJson();
 
 builder.Services.AddScoped<Repository<User>>();
 
