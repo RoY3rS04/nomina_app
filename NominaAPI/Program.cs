@@ -18,7 +18,7 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddScoped<Repository<User>>();
 builder.Services.AddScoped<Repository<Ingresos>>();
 builder.Services.AddScoped<Repository<Empleado>>();
-
+builder.Services.AddScoped<Repository<Deducciones>>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
