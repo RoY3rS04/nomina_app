@@ -44,5 +44,40 @@ namespace NominaAPI.Controllers
 
             return response.SendResponse(this);
         }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IngresoResponse>> Create(IngresosCreateDto createDto)
+        {
+            var response = await _ingresosService.Create(createDto, this);
+
+            return response.SendResponse(this);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IngresoResponse>> Update(int id, IngresosUpdateDto updateDto)
+        {
+            var response = await _ingresosService.Update(id, updateDto, this);
+
+            return response.SendResponse(this);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IngresoResponse>> Delete(int id)
+        {
+            var response = await _ingresosService.Delete(id);
+
+            return response.SendResponse(this);
+        }
     }
 }
