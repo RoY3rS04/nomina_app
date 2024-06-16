@@ -18,15 +18,20 @@ namespace NominaAPI.Controllers
     public class DeduccionesController : ControllerBase
     {
         private readonly DeduccionesService _deduccionesService;
-        private readonly NominaContext _context;
-        public DeduccionesController(Repository<Deducciones> deduccionesRepository,
-            Repository<Empleado> empleadoRepository, NominaContext context,
-            IMapper mapper)
+
+        public DeduccionesController(
+            Repository<Deducciones> deduccionesRepository,
+            Repository<Empleado> empleadoRepository,
+            Repository<Nomina> nominaRepository,
+            IMapper mapper
+        )
         {
-            _deduccionesService = new DeduccionesService(deduccionesRepository,
+            _deduccionesService = new DeduccionesService(
+                deduccionesRepository,
                 empleadoRepository,
-                mapper);
-            _context = context;
+                nominaRepository,
+                mapper
+            );
         }
 
         [HttpGet]
@@ -69,7 +74,7 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<DeduccionResponse>> UpdateDeduccion(int id, DeduccionesUpdateDto updateDto)
+        public async Task<ActionResult<DeduccionResponse>> UpdateDeduccion(int id, JsonPatchDocument<DeduccionesUpdateDto> updateDto)
         {
             var response = await _deduccionesService.UpdateDeduccion(id, updateDto, this);
 
@@ -84,19 +89,9 @@ namespace NominaAPI.Controllers
         public async Task<ActionResult<DeduccionResponse>> DeleteDeduccion(int id)
         {
 
-            var deduccion = await _context.Deducciones.FindAsync(id);
-            if (deduccion == null)
-            {
-                return NotFound();
-            }
-            var nominasRelacionadas = await _context.Nominas
-                .Where(n => n.DeduccionesId == id)
-                .ToListAsync();
-            _context.Nominas.RemoveRange(nominasRelacionadas);
-            _context.Deducciones.Remove(deduccion);
-            await _context.SaveChangesAsync();
+            var response = await _deduccionesService.DeleteDeduccion(id);
 
-            return NoContent();
+            return response.SendResponse(this);
         }
     }
 }

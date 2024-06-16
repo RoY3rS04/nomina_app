@@ -34,6 +34,12 @@ namespace NominaAPI.Repository
             await SaveChangesAsync();
         }
 
+        public async Task DeleteRangeAsync(List<T> entities)
+        {
+            _dbSet.RemoveRange(entities);
+            await SaveChangesAsync();
+        }
+
         public async Task<bool> ExistsAsync(Expression<Func<T, bool>>? filter = null)
         {
             IQueryable<T> query = _dbSet;

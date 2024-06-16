@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NominaAPI.Data;
@@ -7,7 +8,6 @@ using NominaAPI.Http.Responses;
 using NominaAPI.Repository;
 using SharedModels;
 using SharedModels.DTOs.Deducciones;
-using SharedModels.DTOs.Ingresos;
 using System.Linq.Expressions;
 
 namespace NominaAPI.Services
@@ -16,16 +16,19 @@ namespace NominaAPI.Services
     {
         private readonly Repository<Deducciones> _deduccionesRepository;
         private readonly Repository<Empleado> _empleadoRepository;
+        private readonly Repository<Nomina> _nominaRepository;
         private readonly IMapper _mapper;
         public DeduccionesService(
             Repository<Deducciones> deduccionesRepository,
             Repository<Empleado> userRepository,
+            Repository<Nomina> nominaRepository,
             IMapper mapper
         )
         {
             _deduccionesRepository = deduccionesRepository;
             _mapper = mapper;
             _empleadoRepository = userRepository; 
+            _nominaRepository = nominaRepository;
         }
 
         public async Task<DeduccionesResponse> GetAll(int? id, string? fechaCierre) {
@@ -182,7 +185,7 @@ namespace NominaAPI.Services
             }
         }
 
-        public async Task<DeduccionResponse> UpdateDeduccion(int id, DeduccionesUpdateDto updateDto, ControllerBase controller)
+        public async Task<DeduccionResponse> UpdateDeduccion(int id, JsonPatchDocument<DeduccionesUpdateDto> updateDto, ControllerBase controller)
         {
             if (id <= 0)
             {
@@ -204,6 +207,11 @@ namespace NominaAPI.Services
                         Message = "No se encontró ninguna deducción con el ID especificado"
                     };
                 }
+
+                var deduccionesDto = _mapper.Map<DeduccionesUpdateDto>(deduccion);
+
+                updateDto.ApplyTo(deduccionesDto, controller.ModelState);
+
                 if (!controller.ModelState.IsValid)
                 {
                     return new DeduccionResponse
@@ -212,9 +220,9 @@ namespace NominaAPI.Services
                         Message = "Modelo de deducción inválido"
                     };
                 }
-                if (updateDto.EmpleadoId != null)
+                if (deduccionesDto.EmpleadoId != null)
                 {
-                    if (!await _empleadoRepository.ExistsAsync(e => e.Id == updateDto.EmpleadoId))
+                    if (!await _empleadoRepository.ExistsAsync(e => e.Id == deduccionesDto.EmpleadoId))
                     {
                         return new DeduccionResponse
                         {
@@ -223,7 +231,7 @@ namespace NominaAPI.Services
                         };
                     }
                 }
-                _mapper.Map(updateDto, deduccion);
+                _mapper.Map(deduccionesDto, deduccion);
 
                 using (var transaction = await _deduccionesRepository.BeginTransactionAsync())
                 {
@@ -296,11 +304,15 @@ namespace NominaAPI.Services
                     };
                 }
 
+                var relatedNominas = await _nominaRepository.GetAllAsync(n => n.DeduccionesId == deduccion.Id);
+
+                await _nominaRepository.DeleteRangeAsync(relatedNominas);
                 await _deduccionesRepository.DeleteAsync(deduccion);
+
                 return new DeduccionResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Deducción eliminada exitosamente"
+                    Message = "Deducción y nominas relacionadas eliminada exitosamente"
                 };
             }
             catch (Exception)

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using NominaAPI.Http.Responses;
 using NominaAPI.Repository;
@@ -18,9 +19,15 @@ namespace NominaAPI.Controllers
         public IngresosController(
             Repository<Ingresos> ingresosRepository,
             Repository<Empleado> empleadoRepository,
+            Repository<Nomina> nominaRepository,
             IMapper mapper
         ) { 
-            _ingresosService = new IngresosService(ingresosRepository, empleadoRepository, mapper);
+            _ingresosService = new IngresosService(
+                ingresosRepository,
+                empleadoRepository,
+                nominaRepository,
+                mapper
+            );
         }
 
         [HttpGet]
@@ -56,12 +63,12 @@ namespace NominaAPI.Controllers
             return response.SendResponse(this);
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IngresoResponse>> Update(int id, IngresosUpdateDto updateDto)
+        public async Task<ActionResult<IngresoResponse>> Update(int id, JsonPatchDocument<IngresosUpdateDto> updateDto)
         {
             var response = await _ingresosService.Update(id, updateDto, this);
 

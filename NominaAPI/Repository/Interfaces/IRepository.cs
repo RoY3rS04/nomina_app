@@ -10,6 +10,9 @@ namespace NominaAPI.Repository.Interfaces
         Task<T> GetAsync(Expression<Func<T, bool>>? filter = null, bool tracked = true);
         Task<T> GetById(int id);
         Task DeleteAsync(T entity);
+
+        Task DeleteRangeAsync(List<T> entities);
+
         Task SaveChangesAsync();
         Task<bool> ExistsAsync(Expression<Func<T, bool>>? filter = null);
         Task<IDbContextTransaction> BeginTransactionAsync();

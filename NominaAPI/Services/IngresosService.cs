@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Azure;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NominaAPI.Http.Responses;
@@ -13,17 +15,20 @@ namespace NominaAPI.Services
     {
         private readonly Repository<Ingresos> _ingresosRepository;
         private readonly Repository<Empleado> _empleadoRepository;
+        private readonly Repository<Nomina> _nominaRepository;
         private readonly IMapper _mapper;
 
         public IngresosService(
             Repository<Ingresos> ingresosRepository,
             Repository<Empleado> userRepository,
+            Repository<Nomina> nominaRepository,
             IMapper mapper
         )
         {
             _ingresosRepository = ingresosRepository;
             _mapper = mapper;
             _empleadoRepository = userRepository;
+            _nominaRepository = nominaRepository;
         }
 
         //TODO - REFACTOR 
@@ -187,7 +192,7 @@ namespace NominaAPI.Services
 
         public async Task<IngresoResponse> Update(
             int id,
-            IngresosUpdateDto updateDto,
+            JsonPatchDocument<IngresosUpdateDto> updateDto,
             ControllerBase controller
         )
         {
@@ -214,6 +219,10 @@ namespace NominaAPI.Services
                     };
                 }
 
+                var ingresosDto = _mapper.Map<IngresosUpdateDto>(ingresos);
+
+                updateDto.ApplyTo(ingresosDto, controller.ModelState);
+
                 if (!controller.ModelState.IsValid)
                 {
                     return new IngresoResponse
@@ -223,9 +232,9 @@ namespace NominaAPI.Services
                     };
                 }
 
-                if(updateDto.EmpleadoId != null)
+                if(ingresosDto.EmpleadoId != null)
                 {
-                    if(!await _empleadoRepository.ExistsAsync(e => e.Id == updateDto.EmpleadoId))
+                    if(!await _empleadoRepository.ExistsAsync(e => e.Id == ingresosDto.EmpleadoId))
                     {
                         return new IngresoResponse
                         {
@@ -235,23 +244,7 @@ namespace NominaAPI.Services
                     }
                 }
 
-                //TODO REFACTORING
-                updateDto = new IngresosUpdateDto
-                {
-                    Bonos = updateDto.Bonos ?? ingresos.Bonos,
-                    Comision = updateDto.Comision ?? ingresos.Comision,
-                    Depreciacion = updateDto.Depreciacion ?? ingresos.Depreciacion,
-                    DiasExtras = updateDto.DiasExtras ?? ingresos.DiasExtras,
-                    EmpleadoId = updateDto.EmpleadoId ?? ingresos.EmpleadoId,
-                    FechaCierre = updateDto.FechaCierre ?? ingresos.FechaCierre,
-                    HorasExtras = updateDto.HorasExtras ?? ingresos.HorasExtras,
-                    Nocturnidad = updateDto.Nocturnidad ?? ingresos.Nocturnidad,
-                    RiesgoLaboral=updateDto.RiesgoLaboral ?? ingresos.RiesgoLaboral,
-                    SalarioOrdinario = updateDto.SalarioOrdinario ?? ingresos.SalarioOrdinario,
-                    Viatico = updateDto.Viatico ?? ingresos.Viatico
-                };
-
-                _mapper.Map(updateDto, ingresos);
+                _mapper.Map(ingresosDto, ingresos);
 
                 using(var transaction = await _ingresosRepository.BeginTransactionAsync())
                 {
@@ -330,12 +323,15 @@ namespace NominaAPI.Services
                     };
                 }
 
+                var relatedNominas = await _nominaRepository.GetAllAsync(n => n.IngresosId == ingresos.Id);
+
+                await _nominaRepository.DeleteRangeAsync(relatedNominas);
                 await _ingresosRepository.DeleteAsync(ingresos);
 
                 return new IngresoResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Ingresos eliminados correctamente!"
+                    Message = "Ingreso y nominas relacionadas eliminados correctamente!"
                 };
             } catch(Exception e)
             {
