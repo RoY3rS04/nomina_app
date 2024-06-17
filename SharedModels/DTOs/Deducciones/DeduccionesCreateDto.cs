@@ -11,10 +11,7 @@ namespace SharedModels.DTOs.Deducciones
     {
         [Required]
         public int EmpleadoId { get; set; }
-        [Required]
-        public double SalarioBruto { get; set; }
         public double? Prestamos { get; set; }
-        public double? IR { get; set; }
 
         public double? Anticipos { get; set; }
         [Required]

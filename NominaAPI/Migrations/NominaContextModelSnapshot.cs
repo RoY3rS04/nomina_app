@@ -41,13 +41,7 @@ namespace NominaAPI.Migrations
                     b.Property<DateTime>("FechaCierre")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("IR")
-                        .HasColumnType("float");
-
                     b.Property<double>("Prestamos")
-                        .HasColumnType("float");
-
-                    b.Property<double>("SalarioBruto")
                         .HasColumnType("float");
 
                     b.HasKey("Id");

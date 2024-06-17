@@ -62,9 +62,7 @@ namespace NominaAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmpleadoId = table.Column<int>(type: "int", nullable: false),
-                    SalarioBruto = table.Column<double>(type: "float", nullable: false),
                     Prestamos = table.Column<double>(type: "float", nullable: false),
-                    IR = table.Column<double>(type: "float", nullable: false),
                     Anticipos = table.Column<double>(type: "float", nullable: false),
                     FechaCierre = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },

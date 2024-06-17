@@ -6,25 +6,29 @@ using NominaAPI.Http.Responses;
 using NominaAPI.Repository;
 using NominaAPI.Services;
 using SharedModels;
-using SharedModels.DTOs.Ingresos;
+using SharedModels.DTOs.Empleado;
 
 namespace NominaAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class IngresosController : ControllerBase
+    public class EmpleadoController : ControllerBase
     {
-        private readonly IngresosService _ingresosService;
 
-        public IngresosController(
-            Repository<Ingresos> ingresosRepository,
+        private readonly EmpleadoService _empleadoService;
+
+        public EmpleadoController(
             Repository<Empleado> empleadoRepository,
+            Repository<Ingresos> ingresosRepository,
+            Repository<Deducciones> deduccionesRepository,
             Repository<Nomina> nominaRepository,
             IMapper mapper
-        ) { 
-            _ingresosService = new IngresosService(
-                ingresosRepository,
+        )
+        {
+            _empleadoService = new EmpleadoService(
                 empleadoRepository,
+                ingresosRepository,
+                deduccionesRepository,
                 nominaRepository,
                 mapper
             );
@@ -33,9 +37,9 @@ namespace NominaAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IngresosResponse>> GetAll(int? empleadoId, string? fechaCierre)
+        public async Task<ActionResult<EmpleadosResponse>> GetAll()
         {
-            var response = await _ingresosService.GetAll(empleadoId, fechaCierre);
+            var response = await _empleadoService.GetAll();
 
             return response.SendResponse(this);
         }
@@ -45,9 +49,9 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IngresoResponse>> GetById(int id)
+        public async Task<ActionResult<EmpleadoResponse>> GetById(int id)
         {
-            var response = await _ingresosService.GetById(id);
+            var response = await _empleadoService.GetById(id);
 
             return response.SendResponse(this);
         }
@@ -57,9 +61,9 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IngresoResponse>> Create(IngresosCreateDto createDto)
+        public async Task<ActionResult<EmpleadoResponse>> Create(EmpleadoCreateDto createDto)
         {
-            var response = await _ingresosService.Create(createDto, this);
+            var response = await _empleadoService.Create(createDto, this);
 
             return response.SendResponse(this);
         }
@@ -69,9 +73,9 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IngresoResponse>> Update(int id, JsonPatchDocument<IngresosUpdateDto> updateDto)
+        public async Task<ActionResult<EmpleadoResponse>> Update(int id, JsonPatchDocument<EmpleadoUpdateDto> updatePatch)
         {
-            var response = await _ingresosService.Update(id, updateDto, this);
+            var response = await _empleadoService.Update(id, updatePatch, this);
 
             return response.SendResponse(this);
         }
@@ -81,9 +85,9 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IngresoResponse>> Delete(int id)
+        public async Task<ActionResult<EmpleadoResponse>> Delete(int id)
         {
-            var response = await _ingresosService.Delete(id);
+            var response = await _empleadoService.Delete(id);
 
             return response.SendResponse(this);
         }

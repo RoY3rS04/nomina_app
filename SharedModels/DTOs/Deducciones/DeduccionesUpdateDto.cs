@@ -10,9 +10,7 @@ namespace SharedModels.DTOs.Deducciones
     public class DeduccionesUpdateDto
     {
         public int EmpleadoId { get; set; }
-        public double SalarioBruto { get; set; }
         public double? Prestamos { get; set; }
-        public double? IR { get; set; }
         public double? Anticipos { get; set; }
         public DateTime? FechaCierre { get; set; }
     }
