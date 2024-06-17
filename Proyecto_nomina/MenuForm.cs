@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SharedModels;
+using SharedModels.DTOs.User;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,7 +14,8 @@ namespace Proyecto_nomina
 {
     public partial class MenuForm : Form
     {
-        public MenuForm()
+        private UserDto _authUser;
+        public MenuForm(UserDto user)
         {
             InitializeComponent();
 
@@ -21,6 +24,15 @@ namespace Proyecto_nomina
 
             tmContraerMenu.Interval = 15;
             tmContraerMenu.Tick += new EventHandler(tmContraerMenu_Tick);
+
+            _authUser = user;
+
+            if(!_authUser.IsAdmin)
+            {
+                btnRegistroEmpleadoForm.Visible = false;
+                btnRegistroNominaForm.Visible = false;
+                btnRegistroUsuarioForm.Visible = false;
+            }
         }
 
         int lx, ly;

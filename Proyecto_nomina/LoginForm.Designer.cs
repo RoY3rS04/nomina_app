@@ -34,8 +34,8 @@
             panel2 = new Panel();
             pictureBox1 = new PictureBox();
             btnLogin = new Button();
-            textBox2 = new TextBox();
-            textBox1 = new TextBox();
+            txtPassword = new TextBox();
+            txtEmail = new TextBox();
             panel3.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -47,8 +47,8 @@
             panel3.Controls.Add(btnCerrar);
             panel3.Controls.Add(panel2);
             panel3.Controls.Add(btnLogin);
-            panel3.Controls.Add(textBox2);
-            panel3.Controls.Add(textBox1);
+            panel3.Controls.Add(txtPassword);
+            panel3.Controls.Add(txtEmail);
             panel3.Location = new Point(32, 21);
             panel3.Name = "panel3";
             panel3.Size = new Size(349, 337);
@@ -107,30 +107,31 @@
             btnLogin.Text = "Login";
             btnLogin.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnLogin.UseVisualStyleBackColor = false;
+            btnLogin.Click += btnLogin_Click;
             // 
-            // textBox2
+            // txtPassword
             // 
-            textBox2.BackColor = SystemColors.Control;
-            textBox2.BorderStyle = BorderStyle.FixedSingle;
-            textBox2.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox2.ForeColor = SystemColors.WindowFrame;
-            textBox2.Location = new Point(77, 191);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(188, 27);
-            textBox2.TabIndex = 1;
-            textBox2.Text = "Password";
+            txtPassword.BackColor = SystemColors.Control;
+            txtPassword.BorderStyle = BorderStyle.FixedSingle;
+            txtPassword.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtPassword.ForeColor = SystemColors.WindowFrame;
+            txtPassword.Location = new Point(77, 191);
+            txtPassword.Name = "txtPassword";
+            txtPassword.Size = new Size(188, 27);
+            txtPassword.TabIndex = 1;
+            txtPassword.Text = "Password";
             // 
-            // textBox1
+            // txtEmail
             // 
-            textBox1.BackColor = SystemColors.Control;
-            textBox1.BorderStyle = BorderStyle.FixedSingle;
-            textBox1.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox1.ForeColor = SystemColors.WindowFrame;
-            textBox1.Location = new Point(77, 152);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(188, 27);
-            textBox1.TabIndex = 0;
-            textBox1.Text = "Username";
+            txtEmail.BackColor = SystemColors.Control;
+            txtEmail.BorderStyle = BorderStyle.FixedSingle;
+            txtEmail.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtEmail.ForeColor = SystemColors.WindowFrame;
+            txtEmail.Location = new Point(77, 152);
+            txtEmail.Name = "txtEmail";
+            txtEmail.Size = new Size(188, 27);
+            txtEmail.TabIndex = 0;
+            txtEmail.Text = "Email";
             // 
             // LoginForm
             // 
@@ -153,8 +154,8 @@
         #endregion
 
         private Panel panel3;
-        private TextBox textBox2;
-        private TextBox textBox1;
+        private TextBox txtPassword;
+        private TextBox txtEmail;
         private Button btnLogin;
         private Panel panel2;
         private PictureBox pictureBox1;
