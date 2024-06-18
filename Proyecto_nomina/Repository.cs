@@ -36,7 +36,8 @@ namespace Proyecto_nomina
             else
             {
                 var errorResponse = await response.Content.ReadAsStringAsync();
-                throw new Exception(errorResponse);
+                var jsonResponse = JsonConvert.DeserializeObject<Response<T>>(errorResponse);
+                throw new Exception(jsonResponse.Message);
             }
         }
 
@@ -51,7 +52,8 @@ namespace Proyecto_nomina
             else
             {
                 var errorResponse = await response.Content.ReadAsStringAsync();
-                throw new Exception(errorResponse);
+                var jsonResponse = JsonConvert.DeserializeObject<Response<T>>(errorResponse);
+                throw new Exception(jsonResponse.Message);
             }
         }
 
@@ -67,7 +69,8 @@ namespace Proyecto_nomina
             else
             {
                 var errorResponse = await response.Content.ReadAsStringAsync();
-                throw new Exception(errorResponse);
+                var jsonResponse = JsonConvert.DeserializeObject<Response<T>>(errorResponse);
+                throw new Exception(jsonResponse.Message);
             }
         }
 
@@ -83,7 +86,8 @@ namespace Proyecto_nomina
             else
             {
                 var errorResponse = await response.Content.ReadAsStringAsync();
-                throw new Exception(errorResponse);
+                var jsonResponse = JsonConvert.DeserializeObject<Response<T>>(errorResponse);
+                throw new Exception(jsonResponse.Message);
             }
         }
 
@@ -101,7 +105,8 @@ namespace Proyecto_nomina
             else
             {
                 var errorResponse = await response.Content.ReadAsStringAsync();
-                throw new Exception(errorResponse);
+                var jsonResponse = JsonConvert.DeserializeObject<Response<T>>(errorResponse);
+                throw new Exception(jsonResponse.Message);
             }
         }
     }

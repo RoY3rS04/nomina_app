@@ -183,7 +183,7 @@ namespace Proyecto_nomina
 
         private void dgvRegistroEmpleado_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if(e.RowIndex > 0)
+            if (e.RowIndex > 0)
             {
                 var selectedEmpleado = (EmpleadoDto)dgvRegistroEmpleado.SelectedRows[0].DataBoundItem;
                 SetValues(selectedEmpleado);
@@ -205,9 +205,69 @@ namespace Proyecto_nomina
             txtRUC.Text = dto.NumeroRUC;
             txtApellido.Text = dto.PrimerApellido;
             txtNombre.Text = dto.PrimerNombre;
-            rdbMasculino.Checked = dto.Sexo == "Masculino" ? true: false;
+            rdbMasculino.Checked = dto.Sexo == "Masculino" ? true : false;
             rdbFemenino.Checked = dto.Sexo == "Femenino" ? true : false;
             mtxtTelefono.Text = dto.Telefono;
+        }
+
+        private async void btnEliminar_Click(object sender, EventArgs e)
+        {
+            if(dgvRegistroEmpleado.SelectedRows.Count > 0)
+            {
+                var selectedEmpleado = (EmpleadoDto)dgvRegistroEmpleado.SelectedRows[0].DataBoundItem;
+
+                var result = MessageBox.Show(
+                    $"Esta seguro que quiere eliminar al empleado {selectedEmpleado.PrimerNombre} {selectedEmpleado.PrimerApellido}?",
+                    "Confirmacion",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if(result == DialogResult.Yes)
+                {
+                    try
+                    {
+                        var response = await _apiClient.Empleados.DeleteAsync(selectedEmpleado.Id);
+
+                        if(!response)
+                        {
+                            MessageBox.Show(
+                                "Hubo un error al eliminar el empleado",
+                                "Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error
+                            );
+
+                            return;
+                        }
+
+                        MessageBox.Show(
+                            "Empleado eliminado correctamente",
+                            "Exito",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information
+                        );
+
+                        await LoadEmpleadosAsync();
+                    } catch(Exception ex)
+                    {
+                        MessageBox.Show(
+                            $"Error al eliminar empleado {ex.Message}",
+                            "Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
+                        );
+                    }
+                }
+            } else
+            {
+                MessageBox.Show(
+                    "Seleccione un empleado para eliminar",
+                    "Advertencia",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+            }
         }
     }
 }
