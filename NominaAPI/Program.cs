@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using NominaAPI;
 using NominaAPI.Data;
 using NominaAPI.Repository;
+using NominaAPI.Services;
 using SharedModels;
 
 var builder = WebApplication.CreateBuilder(args);
