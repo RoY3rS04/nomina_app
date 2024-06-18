@@ -5,6 +5,7 @@ using SharedModels.DTOs.User;
 using SharedModels.DTOs.Ingresos;
 using SharedModels.DTOs.Deducciones;
 using SharedModels.DTOs.Empleado;
+using SharedModels.DTOs.Nomina;
 
 namespace NominaAPI
 {
@@ -27,6 +28,11 @@ namespace NominaAPI
             CreateMap<Deducciones, DeduccionesDto>().ReverseMap();
             CreateMap<Deducciones, DeduccionesCreateDto>().ReverseMap();    
             CreateMap<Deducciones, DeduccionesUpdateDto>().ReverseMap();
+
+            //Nomina DTOs
+            CreateMap<Nomina, NominaDto>().ReverseMap();
+            CreateMap<Nomina, NominaCreateDto>().ReverseMap();
+            CreateMap<Nomina, NominaUpdateDto>().ReverseMap();
 
             //Empleado DTOs
             CreateMap<Empleado, EmpleadoDto>().ReverseMap();
