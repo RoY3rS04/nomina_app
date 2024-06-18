@@ -33,7 +33,7 @@ namespace NominaAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IngresosResponse>> GetAll(int? empleadoId, string? fechaCierre)
+        public async Task<ActionResult<Response<List<IngresosDto>>>> GetAll(int? empleadoId, string? fechaCierre)
         {
             var response = await _ingresosService.GetAll(empleadoId, fechaCierre);
 
@@ -45,7 +45,7 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IngresoResponse>> GetById(int id)
+        public async Task<ActionResult<Response<IngresosDto>>> GetById(int id)
         {
             var response = await _ingresosService.GetById(id);
 
@@ -57,19 +57,19 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IngresoResponse>> Create(IngresosCreateDto createDto)
+        public async Task<ActionResult<Response<IngresosDto>>> Create(IngresosCreateDto createDto)
         {
             var response = await _ingresosService.Create(createDto, this);
 
             return response.SendResponse(this);
         }
 
-        [HttpPatch("{id}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IngresoResponse>> Update(int id, JsonPatchDocument<IngresosUpdateDto> updateDto)
+        public async Task<ActionResult<Response<IngresosDto>>> Update(int id, IngresosUpdateDto updateDto)
         {
             var response = await _ingresosService.Update(id, updateDto, this);
 
@@ -81,7 +81,7 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IngresoResponse>> Delete(int id)
+        public async Task<ActionResult<Response<IngresosDto>>> Delete(int id)
         {
             var response = await _ingresosService.Delete(id);
 

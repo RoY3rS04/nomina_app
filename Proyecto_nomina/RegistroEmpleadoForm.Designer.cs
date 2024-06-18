@@ -35,7 +35,7 @@
             btnGuardar = new Button();
             panel2 = new Panel();
             groupBox1 = new GroupBox();
-            textBox1 = new TextBox();
+            txtCargo = new TextBox();
             label17 = new Label();
             dgvRegistroEmpleado = new DataGridView();
             cboEstado = new ComboBox();
@@ -108,6 +108,7 @@
             btnNuevo.Text = "Nuevo";
             btnNuevo.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnNuevo.UseVisualStyleBackColor = true;
+            btnNuevo.Click += btnNuevo_Click;
             // 
             // btnEliminar
             // 
@@ -178,7 +179,7 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(textBox1);
+            groupBox1.Controls.Add(txtCargo);
             groupBox1.Controls.Add(label17);
             groupBox1.Controls.Add(dgvRegistroEmpleado);
             groupBox1.Controls.Add(cboEstado);
@@ -223,13 +224,13 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Registro";
             // 
-            // textBox1
+            // txtCargo
             // 
-            textBox1.Font = new Font("Segoe UI", 9.75F);
-            textBox1.Location = new Point(620, 170);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 25);
-            textBox1.TabIndex = 115;
+            txtCargo.Font = new Font("Segoe UI", 9.75F);
+            txtCargo.Location = new Point(620, 170);
+            txtCargo.Name = "txtCargo";
+            txtCargo.Size = new Size(100, 25);
+            txtCargo.TabIndex = 115;
             // 
             // label17
             // 
@@ -600,6 +601,7 @@
             Controls.Add(panel1);
             Name = "RegistroEmpleadoForm";
             Text = "RegistroEmpleadoForm";
+            Load += RegistroEmpleadoForm_Load;
             panel1.ResumeLayout(false);
             panel2.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
@@ -651,7 +653,7 @@
         private DateTimePicker dtpFechaContratacion;
         private ComboBox cboEstado;
         private DataGridView dgvRegistroEmpleado;
-        private TextBox textBox1;
+        private TextBox txtCargo;
         private Label label17;
     }
 }

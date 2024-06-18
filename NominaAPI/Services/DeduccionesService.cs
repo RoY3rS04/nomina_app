@@ -31,7 +31,7 @@ namespace NominaAPI.Services
             _nominaRepository = nominaRepository;
         }
 
-        public async Task<DeduccionesResponse> GetAll(int? id, string? fechaCierre) {
+        public async Task<Response<List<DeduccionesDto>>> GetAll(int? id, string? fechaCierre) {
 
             try
             {
@@ -49,7 +49,7 @@ namespace NominaAPI.Services
 
                     if (!await _empleadoRepository.ExistsAsync(e => e.Id == id))
                     {
-                        return new DeduccionesResponse
+                        return new Response<List<DeduccionesDto>>
                         {
                             StatusCode = StatusCodes.Status400BadRequest,
                             Message = $"No existe empleado con id: {id}"
@@ -69,16 +69,16 @@ namespace NominaAPI.Services
                     deducciones = await _deduccionesRepository.GetAllAsync();
                 }
 
-                return new DeduccionesResponse
+                return new Response<List<DeduccionesDto>>
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Deducciones obtenidas correctamente",
-                    Deducciones = _mapper.Map<List<DeduccionesDto>>(deducciones)
+                    Data = _mapper.Map<List<DeduccionesDto>>(deducciones)
                 };
             }
             catch (FormatException e)
             {
-                return new DeduccionesResponse
+                return new Response<List<DeduccionesDto>>
                 {
                     Message = "Fecha inválida",
                     StatusCode = StatusCodes.Status400BadRequest,
@@ -86,7 +86,7 @@ namespace NominaAPI.Services
             }
             catch (Exception e)
             {
-                return new DeduccionesResponse
+                return new Response<List<DeduccionesDto>>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Error al obtener deducciones"
@@ -95,11 +95,11 @@ namespace NominaAPI.Services
 
         }
 
-        public async Task<DeduccionResponse> GetById(int id)
+        public async Task<Response<List<DeduccionesDto>>> GetById(int id)
         {
             if (id <= 0)
             {
-                return new DeduccionResponse
+                return new Response<List<DeduccionesDto>>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "El ID debe ser un número positivo"
@@ -113,23 +113,23 @@ namespace NominaAPI.Services
 
                 if (deduccion == null)
                 {
-                    return new DeduccionResponse
+                    return new Response<List<DeduccionesDto>>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = "No se encontró ninguna deducción con el ID especificado"
                     };
                 }
 
-                return new DeduccionResponse
+                return new Response<List<DeduccionesDto>>
                 {
-                    Deduccion = _mapper.Map<DeduccionesDto>(deduccion),
+                    Data = _mapper.Map<List<DeduccionesDto>>(deduccion),
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Deducción obtenida correctamente"
                 };
             }
             catch (Exception e)
             {
-                return new DeduccionResponse
+                return new Response<List<DeduccionesDto>>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Error al obtener la deducción especificada"
@@ -137,11 +137,11 @@ namespace NominaAPI.Services
             }
         }
 
-        public async Task<DeduccionResponse> CreateDeduccion(DeduccionesCreateDto deduccionCreate, ControllerBase controller)
+        public async Task<Response<DeduccionesDto>> CreateDeduccion(DeduccionesCreateDto deduccionCreate, ControllerBase controller)
         {
             if (deduccionCreate == null)
             {
-                return new DeduccionResponse
+                return new Response<DeduccionesDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "Debe proporcionar todos los datos necesarios"
@@ -151,7 +151,7 @@ namespace NominaAPI.Services
             {
                 if (!await _empleadoRepository.ExistsAsync(e => e.Id == deduccionCreate.EmpleadoId))
                 {
-                    return new DeduccionResponse
+                    return new Response<DeduccionesDto>
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
                         Message = $"No existe ningún empleado con ID: {deduccionCreate.EmpleadoId}"
@@ -159,7 +159,7 @@ namespace NominaAPI.Services
                 }
                 if (!controller.ModelState.IsValid)
                 {
-                    return new DeduccionResponse
+                    return new Response<DeduccionesDto>
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
                         Message = "Modelo de deducción inválido"
@@ -168,16 +168,16 @@ namespace NominaAPI.Services
                 var nuevaDeduccion = _mapper.Map<Deducciones>(deduccionCreate);
                 await _deduccionesRepository.CreateAsync(nuevaDeduccion);
 
-                return new DeduccionResponse
+                return new Response<DeduccionesDto>
                 {
-                    Deduccion = _mapper.Map<DeduccionesDto>(nuevaDeduccion),
+                    Data = _mapper.Map<DeduccionesDto>(nuevaDeduccion),
                     StatusCode = StatusCodes.Status201Created,
                     Message = "Deducción creada exitosamente"
                 };
             }
             catch (Exception)
             {
-                return new DeduccionResponse
+                return new Response<DeduccionesDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Ocurrió un error al crear la deducción"
@@ -185,11 +185,15 @@ namespace NominaAPI.Services
             }
         }
 
-        public async Task<DeduccionResponse> UpdateDeduccion(int id, JsonPatchDocument<DeduccionesUpdateDto> updateDto, ControllerBase controller)
+        public async Task<Response<DeduccionesDto>> UpdateDeduccion(
+            int id,
+            DeduccionesUpdateDto updateDto,
+            ControllerBase controller
+        )
         {
             if (id <= 0)
             {
-                return new DeduccionResponse
+                return new Response<DeduccionesDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "El ID debe ser un número positivo"
@@ -201,37 +205,26 @@ namespace NominaAPI.Services
                 var deduccion = await _deduccionesRepository.GetById(id);
                 if (deduccion == null)
                 {
-                    return new DeduccionResponse
+                    return new Response<DeduccionesDto>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = "No se encontró ninguna deducción con el ID especificado"
                     };
                 }
 
-                var deduccionesDto = _mapper.Map<DeduccionesUpdateDto>(deduccion);
-
-                updateDto.ApplyTo(deduccionesDto, controller.ModelState);
-
-                if (!controller.ModelState.IsValid)
+                if (updateDto.EmpleadoId != null)
                 {
-                    return new DeduccionResponse
+                    if (!await _empleadoRepository.ExistsAsync(e => e.Id == updateDto.EmpleadoId))
                     {
-                        StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Modelo de deducción inválido"
-                    };
-                }
-                if (deduccionesDto.EmpleadoId != null)
-                {
-                    if (!await _empleadoRepository.ExistsAsync(e => e.Id == deduccionesDto.EmpleadoId))
-                    {
-                        return new DeduccionResponse
+                        return new Response<DeduccionesDto>
                         {
                             StatusCode = StatusCodes.Status400BadRequest,
                             Message = "No existe empleado con el id proporcionado"
                         };
                     }
                 }
-                _mapper.Map(deduccionesDto, deduccion);
+
+                _mapper.Map(updateDto, deduccion);
 
                 using (var transaction = await _deduccionesRepository.BeginTransactionAsync())
                 {
@@ -239,9 +232,9 @@ namespace NominaAPI.Services
                     {
                         await _deduccionesRepository.SaveChangesAsync();
                         transaction.Commit();
-                        return new DeduccionResponse
+                        return new Response<DeduccionesDto>
                         {
-                            Deduccion = _mapper.Map<DeduccionesDto>(deduccion),
+                            Data = _mapper.Map<DeduccionesDto>(deduccion),
                             StatusCode = StatusCodes.Status200OK,
                             Message = "Deducción actualizada exitosamente"
                         };
@@ -250,13 +243,13 @@ namespace NominaAPI.Services
                     {
                         if (!await _deduccionesRepository.ExistsAsync(d => d.Id == id))
                         {
-                            return new DeduccionResponse
+                            return new Response<DeduccionesDto>
                             {
                                 StatusCode = StatusCodes.Status404NotFound,
                                 Message = "No se encontró ninguna deducción con el ID especificado"
                             };
                         }
-                        return new DeduccionResponse
+                        return new Response<DeduccionesDto>
                         {
                             StatusCode = StatusCodes.Status400BadRequest,
                             Message = "Ocurrió un error al actualizar la deducción"
@@ -265,7 +258,7 @@ namespace NominaAPI.Services
                     catch (Exception)
                     {
                         transaction.Rollback();
-                        return new DeduccionResponse
+                        return new Response<DeduccionesDto>
                         {
                             StatusCode = StatusCodes.Status500InternalServerError,
                             Message = "Ocurrió un error al actualizar la deducción"
@@ -275,18 +268,18 @@ namespace NominaAPI.Services
             }
             catch (Exception)
             {
-                return new DeduccionResponse
+                return new Response<DeduccionesDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Ocurrió un error al actualizar la deducción"
                 };
             }
         }
-        public async Task<DeduccionResponse> DeleteDeduccion(int id)
+        public async Task<Response<DeduccionesDto>> DeleteDeduccion(int id)
         {
             if (id <= 0)
             {
-                return new DeduccionResponse
+                return new Response<DeduccionesDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "El ID debe ser un número positivo"
@@ -297,7 +290,7 @@ namespace NominaAPI.Services
                 var deduccion = await _deduccionesRepository.GetById(id);
                 if (deduccion == null)
                 {
-                    return new DeduccionResponse
+                    return new Response<DeduccionesDto>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = "No se encontró ninguna deducción con el ID especificado"
@@ -309,7 +302,7 @@ namespace NominaAPI.Services
                 await _nominaRepository.DeleteRangeAsync(relatedNominas);
                 await _deduccionesRepository.DeleteAsync(deduccion);
 
-                return new DeduccionResponse
+                return new Response<DeduccionesDto>
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Deducción y nominas relacionadas eliminada exitosamente"
@@ -317,7 +310,7 @@ namespace NominaAPI.Services
             }
             catch (Exception)
             {
-                return new DeduccionResponse
+                return new Response<DeduccionesDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Ocurrió un error al eliminar la deducción"

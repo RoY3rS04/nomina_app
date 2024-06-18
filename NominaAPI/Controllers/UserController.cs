@@ -25,7 +25,7 @@ namespace NominaAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<UsersResponse>> GetAllUsers()
+        public async Task<ActionResult<Response<List<UserDto>>>> GetAllUsers()
         {
             var response = await _userService.GetAll();
 
@@ -37,7 +37,7 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<UserResponse>> GetUserById(int id)
+        public async Task<ActionResult<Response<UserDto>>> GetUserById(int id)
         {
 
             var response = await _userService.GetById(id);
@@ -50,7 +50,7 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<UserResponse>> CreateUser(UserCreateDto createDto)
+        public async Task<ActionResult<Response<UserDto>>> CreateUser(UserCreateDto createDto)
         {
             var response = await _userService.CreateUser(createDto, this);
 
@@ -63,7 +63,7 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<UserResponse>> UpdateUser(int id, UserUpdateDto updateDto)
+        public async Task<ActionResult<Response<UserDto>>> UpdateUser(int id, UserUpdateDto updateDto)
         {
             var response = await _userService.Update(id, updateDto, this);
 
@@ -75,7 +75,7 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<UserResponse>> DeleteUser(int id)
+        public async Task<ActionResult<Response<UserDto>>> DeleteUser(int id)
         {
             var response = await _userService.Delete(id);
 

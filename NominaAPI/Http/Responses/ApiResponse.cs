@@ -4,7 +4,7 @@ namespace NominaAPI.Http.Responses
 {
     using Http.Responses;
 
-    public abstract class ApiResponse: IResponse
+    public class ApiResponse: IResponse
     {
         public int StatusCode { get; set; }
         public string Message { get; set; }

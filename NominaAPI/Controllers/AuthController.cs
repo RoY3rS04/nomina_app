@@ -6,6 +6,8 @@ using NominaAPI.Repository;
 using NominaAPI.Services;
 using SharedModels;
 using AutoMapper;
+using NominaAPI.Http.Responses;
+using SharedModels.DTOs.User;
 
 namespace NominaAPI.Controllers
 {
@@ -28,7 +30,7 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<User>> LoginUser(LoginUserDto loginDto)
+        public async Task<ActionResult<Response<UserDto>>> LoginUser(LoginUserDto loginDto)
         {
            
             var response = await _authService.Login(loginDto);

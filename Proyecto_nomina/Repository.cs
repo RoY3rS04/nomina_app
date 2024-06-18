@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using Newtonsoft.Json;
+using NominaAPI.Http.Responses;
 using SharedModels.DTOs.User;
 
 namespace Proyecto_nomina
@@ -21,7 +22,7 @@ namespace Proyecto_nomina
             _httpClient = httpClient;
         }
 
-        public async Task<T> CreateAsync(object dto)
+        public async Task<Response<T>> CreateAsync(object dto)
         {
             var json = JsonConvert.SerializeObject(dto);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -30,7 +31,7 @@ namespace Proyecto_nomina
             if (response.IsSuccessStatusCode)
             {
                 var responseData = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<T>(responseData);
+                return JsonConvert.DeserializeObject<Response<T>>(responseData);
             }
             else
             {
@@ -54,14 +55,14 @@ namespace Proyecto_nomina
             }
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<Response<IEnumerable<T>>> GetAllAsync()
         {
             var response = await _httpClient.GetAsync(_endpoint);
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<IEnumerable<T>>(content);
+                return JsonConvert.DeserializeObject<Response<IEnumerable<T>>>(content);
             }
             else
             {
@@ -70,14 +71,14 @@ namespace Proyecto_nomina
             }
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<Response<T>> GetByIdAsync(int id)
         {
             var response = await _httpClient.GetAsync($"{_endpoint}/{id}");
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<T>(content);
+                return JsonConvert.DeserializeObject<Response<T>>(content);
             }
             else
             {

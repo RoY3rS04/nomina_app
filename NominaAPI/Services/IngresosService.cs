@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +31,7 @@ namespace NominaAPI.Services
         }
 
         //TODO - REFACTOR 
-        public async Task<IngresosResponse> GetAll(int? id, string? fechaCierre) {
+        public async Task<Response<List<IngresosDto>>> GetAll(int? id, string? fechaCierre) {
 
             try
             {
@@ -50,7 +49,7 @@ namespace NominaAPI.Services
 
                     if(!await _empleadoRepository.ExistsAsync(e => e.Id == id))
                     {
-                        return new IngresosResponse
+                        return new Response<List<IngresosDto>>
                         {
                             StatusCode = StatusCodes.Status400BadRequest,
                             Message = "No existe empleado con id: {id}"
@@ -70,16 +69,16 @@ namespace NominaAPI.Services
                     ingresos = await _ingresosRepository.GetAllAsync();
                 }
 
-                return new IngresosResponse
+                return new Response<List<IngresosDto>>
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Ingresos obtenidos correctamente",
-                    Ingresos = _mapper.Map<List<IngresosDto>>(ingresos)
+                    Data = _mapper.Map<List<IngresosDto>>(ingresos)
                 };
             }
             catch (FormatException e)
             {
-                return new IngresosResponse
+                return new Response<List<IngresosDto>>
                 {
                     Message = "Fecha invalida",
                     StatusCode = StatusCodes.Status400BadRequest,
@@ -87,7 +86,7 @@ namespace NominaAPI.Services
             }
             catch (Exception e)
             {
-                return new IngresosResponse
+                return new Response<List<IngresosDto>>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Error al obtener ingresos"
@@ -96,11 +95,11 @@ namespace NominaAPI.Services
 
         }
 
-        public async Task<IngresoResponse> GetById(int id)
+        public async Task<Response<IngresosDto>> GetById(int id)
         {
             if (id <= 0)
             {
-                return new IngresoResponse
+                return new Response<IngresosDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "El id debe ser un numero mayor a 0"
@@ -114,23 +113,23 @@ namespace NominaAPI.Services
 
                 if (ingreso == null)
                 {
-                    return new IngresoResponse
+                    return new Response<IngresosDto>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = "No existen ingresos con el id especificado"
                     };
                 }
 
-                return new IngresoResponse
+                return new Response<IngresosDto>
                 {
-                    Ingreso = _mapper.Map<IngresosDto>(ingreso),
+                    Data = _mapper.Map<IngresosDto>(ingreso),
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Ingreso obtenido correctamente!"
                 };
             }
             catch (Exception e)
             {
-                return new IngresoResponse
+                return new Response<IngresosDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Error al obtener el ingreso especificado"
@@ -138,11 +137,11 @@ namespace NominaAPI.Services
             }
         }
 
-        public async Task<IngresoResponse> Create(IngresosCreateDto createDto, ControllerBase controller)
+        public async Task<Response<IngresosDto>> Create(IngresosCreateDto createDto, ControllerBase controller)
         {
             if(createDto == null)
             {
-                return new IngresoResponse
+                return new Response<IngresosDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "Por favor envie la informacion necesaria"
@@ -154,7 +153,7 @@ namespace NominaAPI.Services
 
                 if(!await _empleadoRepository.ExistsAsync(e => e.Id == createDto.EmpleadoId))
                 {
-                    return new IngresoResponse
+                    return new Response<IngresosDto>
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
                         Message = "No existe el empleado al que se quieren agregar los ingresos"
@@ -163,7 +162,7 @@ namespace NominaAPI.Services
 
                 if(!controller.ModelState.IsValid)
                 {
-                    return new IngresoResponse
+                    return new Response<IngresosDto>
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
                         Message = "Modelo de ingresos invalido"
@@ -174,15 +173,15 @@ namespace NominaAPI.Services
 
                 await _ingresosRepository.CreateAsync(newIngreso);
 
-                return new IngresoResponse
+                return new Response<IngresosDto>
                 {
-                    Ingreso = _mapper.Map<IngresosDto>(newIngreso),
+                    Data = _mapper.Map<IngresosDto>(newIngreso),
                     StatusCode = StatusCodes.Status201Created,
                     Message = "Ingresos agregados correctamente al empleado"
                 };
             } catch(Exception e)
             {
-                return new IngresoResponse
+                return new Response<IngresosDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Error al crear ingresos"
@@ -190,15 +189,15 @@ namespace NominaAPI.Services
             }
         }
 
-        public async Task<IngresoResponse> Update(
+        public async Task<Response<IngresosDto>> Update(
             int id,
-            JsonPatchDocument<IngresosUpdateDto> updateDto,
+            IngresosUpdateDto updateDto,
             ControllerBase controller
         )
         {
             if(id <= 0)
             {
-                return new IngresoResponse
+                return new Response<IngresosDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "El id debe de ser un numero positivo"
@@ -212,31 +211,18 @@ namespace NominaAPI.Services
 
                 if( ingresos == null )
                 {
-                    return new IngresoResponse
+                    return new Response<IngresosDto>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = "No existen ingresos con el id que se recibio"
                     };
                 }
 
-                var ingresosDto = _mapper.Map<IngresosUpdateDto>(ingresos);
-
-                updateDto.ApplyTo(ingresosDto, controller.ModelState);
-
-                if (!controller.ModelState.IsValid)
+                if (updateDto.EmpleadoId != null)
                 {
-                    return new IngresoResponse
+                    if (!await _empleadoRepository.ExistsAsync(e => e.Id == updateDto.EmpleadoId))
                     {
-                        StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Modelo de ingresos invalido"
-                    };
-                }
-
-                if(ingresosDto.EmpleadoId != null)
-                {
-                    if(!await _empleadoRepository.ExistsAsync(e => e.Id == ingresosDto.EmpleadoId))
-                    {
-                        return new IngresoResponse
+                        return new Response<IngresosDto>
                         {
                             StatusCode = StatusCodes.Status400BadRequest,
                             Message = "No existe empleado con el id proporcionado"
@@ -244,7 +230,7 @@ namespace NominaAPI.Services
                     }
                 }
 
-                _mapper.Map(ingresosDto, ingresos);
+                _mapper.Map(updateDto, ingresos);
 
                 using(var transaction = await _ingresosRepository.BeginTransactionAsync())
                 {
@@ -254,9 +240,9 @@ namespace NominaAPI.Services
                         await _ingresosRepository.SaveChangesAsync();
                         transaction.Commit();
 
-                        return new IngresoResponse
+                        return new Response<IngresosDto>
                         {
-                            Ingreso = _mapper.Map<IngresosDto>(ingresos),
+                            Data = _mapper.Map<IngresosDto>(ingresos),
                             StatusCode = StatusCodes.Status200OK,
                             Message = "Ingresos actualizados correctamente!"
                         };
@@ -264,14 +250,14 @@ namespace NominaAPI.Services
                     } catch(DbUpdateConcurrencyException) {
                         if (!await _ingresosRepository.ExistsAsync(i => i.Id == id))
                         {
-                            return new IngresoResponse
+                            return new Response<IngresosDto>
                             {
                                 StatusCode = StatusCodes.Status404NotFound,
                                 Message = "No hay ingresos con ese id"
                             };
                         }
 
-                        return new IngresoResponse
+                        return new Response<IngresosDto>
                         {
                             StatusCode = StatusCodes.Status500InternalServerError,
                             Message = "Hubo un error al actualizar los ingresos"
@@ -281,7 +267,7 @@ namespace NominaAPI.Services
                     {
                         transaction.Rollback();
 
-                        return new IngresoResponse
+                        return new Response<IngresosDto>
                         {
                             StatusCode = StatusCodes.Status500InternalServerError,
                             Message = "Hubo un error al actualizar los ingresos"
@@ -291,7 +277,7 @@ namespace NominaAPI.Services
 
             } catch (Exception e)
             {
-                return new IngresoResponse
+                return new Response<IngresosDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Hubo un error al actualizar los ingresos"
@@ -299,11 +285,11 @@ namespace NominaAPI.Services
             }
         }
 
-        public async Task<IngresoResponse> Delete(int id)
+        public async Task<Response<IngresosDto>> Delete(int id)
         {
             if (id <= 0)
             {
-                return new IngresoResponse
+                return new Response<IngresosDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "El id debe de ser un numero positivo"
@@ -316,7 +302,7 @@ namespace NominaAPI.Services
 
                 if(ingresos == null)
                 {
-                    return new IngresoResponse
+                    return new Response<IngresosDto>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = "No existen ingresos con ese id"
@@ -328,14 +314,14 @@ namespace NominaAPI.Services
                 await _nominaRepository.DeleteRangeAsync(relatedNominas);
                 await _ingresosRepository.DeleteAsync(ingresos);
 
-                return new IngresoResponse
+                return new Response<IngresosDto>
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Ingreso y nominas relacionadas eliminados correctamente!"
                 };
             } catch(Exception e)
             {
-                return new IngresoResponse
+                return new Response<IngresosDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Hubo un error al borrar los ingresos"

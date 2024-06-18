@@ -34,23 +34,23 @@ namespace NominaAPI.Services
             _nominaRepository = nominaRepository;
         }
 
-        public async Task<EmpleadosResponse> GetAll()
+        public async Task<Response<List<EmpleadoDto>>> GetAll()
         {
             try
             {
 
                 var empleados = await _empleadoRepository.GetAllAsync();
 
-                return new EmpleadosResponse
+                return new Response<List<EmpleadoDto>>
                 {
-                    Empleados = _mapper.Map<List<EmpleadoDto>>(empleados),
+                    Data = _mapper.Map<List<EmpleadoDto>>(empleados),
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Empleados obtenidos correctamente!"
                 };
             }
             catch (Exception e)
             {
-                return new EmpleadosResponse
+                return new Response<List<EmpleadoDto>>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Hubo un error al obtener los empleados"
@@ -58,11 +58,11 @@ namespace NominaAPI.Services
             }
         }
 
-        public async Task<EmpleadoResponse> GetById(int id)
+        public async Task<Response<EmpleadoDto>> GetById(int id)
         {
             if(id <= 0)
             {
-                return new EmpleadoResponse
+                return new Response<EmpleadoDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "El id debe de ser un numero positivo"
@@ -76,23 +76,23 @@ namespace NominaAPI.Services
 
                 if(empleado == null)
                 {
-                    return new EmpleadoResponse
+                    return new Response<EmpleadoDto>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = $"No existe un empleado con id: {id}"
                     };
                 }
 
-                return new EmpleadoResponse
+                return new Response<EmpleadoDto>
                 {
-                    Empleado = _mapper.Map<EmpleadoDto>(empleado),
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    Data = _mapper.Map<EmpleadoDto>(empleado),
+                    StatusCode = StatusCodes.Status200OK,
                     Message = "Empleado obtenido correctamente!"
                 };
 
             } catch(Exception e)
             {
-                return new EmpleadoResponse
+                return new Response<EmpleadoDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Hubo un error al obtener el empleado"
@@ -100,11 +100,11 @@ namespace NominaAPI.Services
             }
         }
 
-        public async Task<EmpleadoResponse> Create(EmpleadoCreateDto createDto, ControllerBase controller)
+        public async Task<Response<EmpleadoDto>> Create(EmpleadoCreateDto createDto, ControllerBase controller)
         {
             if(createDto == null)
             {
-                return new EmpleadoResponse
+                return new Response<EmpleadoDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "Por favor ingrese la informacion requerida"
@@ -123,7 +123,7 @@ namespace NominaAPI.Services
 
                 if (empleadoExists)
                 {
-                    return new EmpleadoResponse
+                    return new Response<EmpleadoDto>
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
                         Message = "Ya existe un empleado con esas identificaciones"
@@ -132,7 +132,7 @@ namespace NominaAPI.Services
 
                 if(!controller.ModelState.IsValid)
                 {
-                    return new EmpleadoResponse
+                    return new Response<EmpleadoDto>
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
                         Message = "Proporcione la informacion requerida"
@@ -143,16 +143,16 @@ namespace NominaAPI.Services
 
                 await _empleadoRepository.CreateAsync(newEmpleado);
 
-                return new EmpleadoResponse
+                return new Response<EmpleadoDto>
                 {
-                    Empleado = _mapper.Map<EmpleadoDto>(newEmpleado),
+                    Data = _mapper.Map<EmpleadoDto>(newEmpleado),
                     StatusCode = StatusCodes.Status201Created,
                     Message = "Empleado creado correctamente!"
                 };
 
             } catch(Exception e)
             {
-                return new EmpleadoResponse
+                return new Response<EmpleadoDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Hubo un error al intentar crear el empleado"
@@ -160,15 +160,15 @@ namespace NominaAPI.Services
             }
         }
 
-        public async Task<EmpleadoResponse> Update(
+        public async Task<Response<EmpleadoDto>> Update(
             int id,
-            JsonPatchDocument<EmpleadoUpdateDto> updatePatch,
+            EmpleadoUpdateDto updateDto,
             ControllerBase controller
         )
         {
             if (id <= 0)
             {
-                return new EmpleadoResponse
+                return new Response<EmpleadoDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "El id debe de ser un numero positivo"
@@ -182,27 +182,14 @@ namespace NominaAPI.Services
 
                 if (empleado == null)   
                 {
-                    return new EmpleadoResponse
+                    return new Response<EmpleadoDto>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = "No existe empleado con el id que se recibio"
                     };
                 }
 
-                var empleadoDto = _mapper.Map<EmpleadoUpdateDto>(empleado);
-
-                updatePatch.ApplyTo(empleadoDto, controller.ModelState);
-
-                if (!controller.ModelState.IsValid)
-                {
-                    return new EmpleadoResponse
-                    {
-                        StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Modelo de empleado invalido"
-                    };
-                }
-
-                _mapper.Map(empleadoDto, empleado);
+                _mapper.Map(updateDto, empleado);
 
                 using (var transaction = await _empleadoRepository.BeginTransactionAsync())
                 {
@@ -212,9 +199,9 @@ namespace NominaAPI.Services
                         await _empleadoRepository.SaveChangesAsync();
                         transaction.Commit();
 
-                        return new EmpleadoResponse
+                        return new Response<EmpleadoDto>
                         {
-                            Empleado = _mapper.Map<EmpleadoDto>(empleado),
+                            Data = _mapper.Map<EmpleadoDto>(empleado),
                             StatusCode = StatusCodes.Status200OK,
                             Message = "Empleado actualizado correctamente!"
                         };
@@ -224,14 +211,14 @@ namespace NominaAPI.Services
                     {
                         if (!await _empleadoRepository.ExistsAsync(e => e.Id == id))
                         {
-                            return new EmpleadoResponse
+                            return new Response<EmpleadoDto>
                             {
                                 StatusCode = StatusCodes.Status404NotFound,
                                 Message = "No hay ingresos con ese id"
                             };
                         }
 
-                        return new EmpleadoResponse
+                        return new Response<EmpleadoDto>
                         {
                             StatusCode = StatusCodes.Status500InternalServerError,
                             Message = "Hubo un error al actualizar el empleado"
@@ -241,7 +228,7 @@ namespace NominaAPI.Services
                     {
                         transaction.Rollback();
 
-                        return new EmpleadoResponse
+                        return new Response<EmpleadoDto>
                         {
                             StatusCode = StatusCodes.Status500InternalServerError,
                             Message = "Hubo un error al actualizar el empleado"
@@ -252,7 +239,7 @@ namespace NominaAPI.Services
             }
             catch (Exception e)
             {
-                return new EmpleadoResponse
+                return new Response<EmpleadoDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Hubo un error al actualizar el empleado"
@@ -260,11 +247,11 @@ namespace NominaAPI.Services
             }
         }
 
-        public async Task<EmpleadoResponse> Delete(int id)
+        public async Task<Response<EmpleadoDto>> Delete(int id)
         {
             if (id <= 0)
             {
-                return new EmpleadoResponse
+                return new Response<EmpleadoDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "El id debe de ser un numero positivo"
@@ -277,7 +264,7 @@ namespace NominaAPI.Services
 
                 if (empleado == null)
                 {
-                    return new EmpleadoResponse
+                    return new Response<EmpleadoDto>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = "No existe empleado con ese id"
@@ -293,7 +280,7 @@ namespace NominaAPI.Services
                 await _deduccionesRepository.DeleteRangeAsync(relatedDeducciones);
                 await _empleadoRepository.DeleteAsync(empleado);
 
-                return new EmpleadoResponse
+                return new Response<EmpleadoDto>
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Empleado y sus ingresos, deducciones y nominas relacionadas eliminados correctamente!"
@@ -301,7 +288,7 @@ namespace NominaAPI.Services
             }
             catch (Exception e)
             {
-                return new EmpleadoResponse
+                return new Response<EmpleadoDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Hubo un error al borrar el empleado"

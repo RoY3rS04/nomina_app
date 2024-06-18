@@ -37,7 +37,7 @@ namespace NominaAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<EmpleadosResponse>> GetAll()
+        public async Task<ActionResult<Response<List<EmpleadoDto>>>> GetAll()
         {
             var response = await _empleadoService.GetAll();
 
@@ -49,7 +49,7 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<EmpleadoResponse>> GetById(int id)
+        public async Task<ActionResult<Response<EmpleadoDto>>> GetById(int id)
         {
             var response = await _empleadoService.GetById(id);
 
@@ -61,19 +61,19 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<EmpleadoResponse>> Create(EmpleadoCreateDto createDto)
+        public async Task<ActionResult<Response<EmpleadoDto>>> Create(EmpleadoCreateDto createDto)
         {
             var response = await _empleadoService.Create(createDto, this);
 
             return response.SendResponse(this);
         }
 
-        [HttpPatch("{id}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<EmpleadoResponse>> Update(int id, JsonPatchDocument<EmpleadoUpdateDto> updatePatch)
+        public async Task<ActionResult<Response<EmpleadoDto>>> Update(int id, EmpleadoUpdateDto updatePatch)
         {
             var response = await _empleadoService.Update(id, updatePatch, this);
 
@@ -85,7 +85,7 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<EmpleadoResponse>> Delete(int id)
+        public async Task<ActionResult<Response<EmpleadoDto>>> Delete(int id)
         {
             var response = await _empleadoService.Delete(id);
 

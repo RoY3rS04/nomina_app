@@ -22,12 +22,12 @@ namespace NominaAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<UserResponse> CreateUser(UserCreateDto userCreate, ControllerBase controller)
+        public async Task<Response<UserDto>> CreateUser(UserCreateDto userCreate, ControllerBase controller)
         {
 
             if(userCreate == null)
             {
-                return new UserResponse
+                return new Response<UserDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "You must provide all the needed data"
@@ -39,7 +39,7 @@ namespace NominaAPI.Services
 
                 if(await _userRepository.ExistsAsync(u => u.Email ==  userCreate.Email))
                 {
-                    return new UserResponse
+                    return new Response<UserDto>
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
                         Message = "There's already a user with that email"
@@ -48,7 +48,7 @@ namespace NominaAPI.Services
 
                 if(!controller.ModelState.IsValid)
                 {
-                    return new UserResponse
+                    return new Response<UserDto>
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
                         Message = "Invalid user model"
@@ -61,15 +61,15 @@ namespace NominaAPI.Services
 
                 await _userRepository.CreateAsync(newStudent);
 
-                return new UserResponse
+                return new Response<UserDto>
                 {
-                    User = _mapper.Map<UserDto>(newStudent),
+                    Data = _mapper.Map<UserDto>(newStudent),
                     StatusCode = StatusCodes.Status201Created,
                     Message = "User created successfully!"
                 };
             } catch(Exception ex)
             {
-                return new UserResponse
+                return new Response<UserDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Something went wrong"
@@ -77,11 +77,11 @@ namespace NominaAPI.Services
             }
         }
 
-        public async Task<UserResponse> GetById(int id)
+        public async Task<Response<UserDto>> GetById(int id)
         {
             if(id <= 0)
             {
-                return new UserResponse
+                return new Response<UserDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "The id must be a positive number"
@@ -95,22 +95,22 @@ namespace NominaAPI.Services
 
                 if(user == null)
                 {
-                    return new UserResponse
+                    return new Response<UserDto>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = "There's no user with that id"
                     };
                 }
 
-                return new UserResponse
+                return new Response<UserDto>
                 {
-                    User = _mapper.Map<UserDto>(user),
+                    Data = _mapper.Map<UserDto>(user),
                     StatusCode = StatusCodes.Status200OK,
                     Message = "User found successfully!"
                 };
             } catch(Exception e)
             {
-                return new UserResponse
+                return new Response<UserDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Something went wrong"
@@ -118,22 +118,22 @@ namespace NominaAPI.Services
             }
         }
 
-        public async Task<UsersResponse> GetAll()
+        public async Task<Response<List<UserDto>>> GetAll()
         {
             try
             {
 
                 var users = await _userRepository.GetAllAsync();
 
-                return new UsersResponse
+                return new Response<List<UserDto>>
                 {
-                    Users = _mapper.Map<List<UserDto>>(users),
+                    Data = _mapper.Map<List<UserDto>>(users),
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Users retrieved successfully!"
                 };
             } catch(Exception e)
             {
-                return new UsersResponse
+                return new Response<List<UserDto>>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Something went wrong when getting users"
@@ -141,14 +141,14 @@ namespace NominaAPI.Services
             }
         }
 
-        public async Task<UserResponse> Update(
+        public async Task<Response<UserDto>> Update(
             int id,
             UserUpdateDto updateDto,
             ControllerBase controller
         ) {
             if (id <= 0)
             {
-                return new UserResponse
+                return new Response<UserDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "The id must be a positive number"
@@ -161,7 +161,7 @@ namespace NominaAPI.Services
 
                 if (user == null)
                 {
-                    return new UserResponse
+                    return new Response<UserDto>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = "There's no user with that id"
@@ -170,7 +170,7 @@ namespace NominaAPI.Services
 
                 if(!controller.ModelState.IsValid)
                 {
-                    return new UserResponse
+                    return new Response<UserDto>
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
                         Message = "Invalid user model"
@@ -182,7 +182,7 @@ namespace NominaAPI.Services
 
                 /*if(!BCrypt.Verify(updateDto.ActualPassword, user.Password))
                 {
-                    return new UserResponse
+                    return new Response<UserDto>
                     {
                         StatusCode = StatusCodes.Status401Unauthorized,
                         Message = "Invalid password"
@@ -205,9 +205,9 @@ namespace NominaAPI.Services
                         await _userRepository.SaveChangesAsync();
                         transaction.Commit();
 
-                        return new UserResponse
+                        return new Response<UserDto>
                         {
-                            User = _mapper.Map<UserDto>(user),
+                            Data = _mapper.Map<UserDto>(user),
                             StatusCode = StatusCodes.Status200OK,
                             Message = "User updated successfully!"
                         };
@@ -215,14 +215,14 @@ namespace NominaAPI.Services
                     {
                         if(!await _userRepository.ExistsAsync(u => u.Id == id))
                         {
-                            return new UserResponse
+                            return new Response<UserDto>
                             {
                                 StatusCode = StatusCodes.Status404NotFound,
                                 Message = "There's no user with that id"
                             };
                         }
 
-                        return new UserResponse
+                        return new Response<UserDto>
                         {
                             StatusCode = StatusCodes.Status500InternalServerError,
                             Message = "Something went wrong when updating the user"
@@ -232,7 +232,7 @@ namespace NominaAPI.Services
                     {
                         transaction.Rollback();
 
-                        return new UserResponse
+                        return new Response<UserDto>
                         {
                             StatusCode = StatusCodes.Status500InternalServerError,
                             Message = "Something went wrong when updating the user"
@@ -241,7 +241,7 @@ namespace NominaAPI.Services
                 }
             } catch(Exception e)
             {
-                return new UserResponse
+                return new Response<UserDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Something went wrong when updating the user"
@@ -249,11 +249,11 @@ namespace NominaAPI.Services
             }
         }
 
-        public async Task<UserResponse> Delete(int id)
+        public async Task<Response<UserDto>> Delete(int id)
         {
             if (id <= 0)
             {
-                return new UserResponse
+                return new Response<UserDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "The id must be a positive number"
@@ -266,7 +266,7 @@ namespace NominaAPI.Services
 
                 if(user == null)
                 {
-                    return new UserResponse
+                    return new Response<UserDto>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = "There's no user with that id"
@@ -275,14 +275,14 @@ namespace NominaAPI.Services
 
                 await _userRepository.DeleteAsync(user);
 
-                return new UserResponse
+                return new Response<UserDto>
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "User deleted successfully!"
                 };
             } catch(Exception e)
             {
-                return new UserResponse
+                return new Response<UserDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Something went wrong when deleting user"

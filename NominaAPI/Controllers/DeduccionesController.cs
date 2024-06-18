@@ -37,7 +37,7 @@ namespace NominaAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<DeduccionesResponse>> GetAllDeducciones(int? id, string? fechaCierre)
+        public async Task<ActionResult<Response<List<DeduccionesDto>>>> GetAllDeducciones(int? id, string? fechaCierre)
         {
             var response = await _deduccionesService.GetAll(id,fechaCierre);
 
@@ -49,7 +49,7 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<DeduccionesResponse>> GetUserById(int id)
+        public async Task<ActionResult<Response<DeduccionesDto>>> GetById(int id)
         {
 
             var response = await _deduccionesService.GetById(id);
@@ -62,19 +62,19 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<DeduccionResponse>> CreateDeduccion(DeduccionesCreateDto createDto)
+        public async Task<ActionResult<Response<DeduccionesDto>>> CreateDeduccion(DeduccionesCreateDto createDto)
         {
             var response = await _deduccionesService.CreateDeduccion(createDto, this);
             return response.SendResponse(this);
         }
 
-        [HttpPatch("{id}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<DeduccionResponse>> UpdateDeduccion(int id, JsonPatchDocument<DeduccionesUpdateDto> updateDto)
+        public async Task<ActionResult<Response<DeduccionesDto>>> UpdateDeduccion(int id, DeduccionesUpdateDto updateDto)
         {
             var response = await _deduccionesService.UpdateDeduccion(id, updateDto, this);
 
@@ -86,7 +86,7 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<DeduccionResponse>> DeleteDeduccion(int id)
+        public async Task<ActionResult<Response<DeduccionesDto>>> DeleteDeduccion(int id)
         {
 
             var response = await _deduccionesService.DeleteDeduccion(id);
