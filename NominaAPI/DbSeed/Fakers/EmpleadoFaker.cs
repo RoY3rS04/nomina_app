@@ -6,11 +6,7 @@ namespace NominaAPI.DbSeed.Fakers
     public class EmpleadoFaker: Faker<Empleado>
     {
 
-        enum EstadoCivil
-        {
-            Solterx,
-            Casadx
-        }
+        private string[] EstadosCiviles = ["Soltero/a", "Casado/a"];
 
         enum Sexo
         {
@@ -26,7 +22,7 @@ namespace NominaAPI.DbSeed.Fakers
             RuleFor(e => e.Cedula, new Randomizer().Replace("###-########-####?"));
             RuleFor(e => e.Celular, new Randomizer().Replace("########"));
             RuleFor(e => e.Estado, true);
-            RuleFor(e => e.EstadoCivil, f => f.PickRandom(Enum.GetNames(typeof(EstadoCivil))));
+            RuleFor(e => e.EstadoCivil, f => f.PickRandom(EstadosCiviles));
             RuleFor(e => e.Cargo, f => f.Name.JobTitle());
             RuleFor(e => e.CodigoEmpleado, new Randomizer().Replace("****-****"));
             RuleFor(e => e.Direccion, f => f.Address.FullAddress());

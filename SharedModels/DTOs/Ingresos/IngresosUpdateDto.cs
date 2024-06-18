@@ -9,6 +9,7 @@ namespace SharedModels.DTOs.Ingresos
 {
     public class IngresosUpdateDto
     {
+        public int Id { get; set; }
         public int EmpleadoId { get; set; }
         public double SalarioOrdinario { get; set; }
         public int DiasExtras { get; set; }

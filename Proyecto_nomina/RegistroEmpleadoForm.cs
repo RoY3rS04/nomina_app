@@ -26,7 +26,7 @@ namespace Proyecto_nomina
 
         private async void btnNuevo_Click(object sender, EventArgs e)
         {
-            EmpleadoCreateDto dto = GetValues();
+            EmpleadoDto dto = GetValues();
 
             try
             {
@@ -56,18 +56,21 @@ namespace Proyecto_nomina
 
         private void ClearInputs()
         {
-            foreach(Control control in this.Controls)
+            foreach (Control control in this.Controls)
             {
-                if(control.GetType() == typeof(TextBox))
+                if (control.GetType() == typeof(TextBox))
                 {
                     control.Text = "";
-                } else if(control.GetType() == typeof(DateTimePicker))
+                }
+                else if (control.GetType() == typeof(DateTimePicker))
                 {
                     (control as DateTimePicker).Value = DateTimePicker.MinimumDateTime;
-                } else if(control.GetType() == typeof(RadioButton))
+                }
+                else if (control.GetType() == typeof(RadioButton))
                 {
                     (control as RadioButton).Checked = false;
-                } else if(control.GetType() == typeof(ComboBox))
+                }
+                else if (control.GetType() == typeof(ComboBox))
                 {
                     (control as ComboBox).SelectedIndex = -1;
                 }
@@ -94,10 +97,9 @@ namespace Proyecto_nomina
             }
         }
 
-        private EmpleadoCreateDto GetValues()
+        private EmpleadoDto GetValues()
         {
-            MessageBox.Show(cboEstadoCivil.SelectedText);
-            return new EmpleadoCreateDto
+            return new EmpleadoDto
             {
                 Cargo = txtCargo.Text.Trim(),
                 Cedula = txtCedula.Text.Trim(),
@@ -105,7 +107,7 @@ namespace Proyecto_nomina
                 CodigoEmpleado = txtCodigoEmpleado.Text.Trim(),
                 Direccion = txtDireccion.Text.Trim(),
                 Estado = !(Convert.ToBoolean(cboEstado.SelectedIndex)),
-                EstadoCivil = cboEstadoCivil.SelectedText,
+                EstadoCivil = cboEstadoCivil.GetItemText(cboEstadoCivil.SelectedItem),
                 FechaContratacion = dtpFechaContratacion.Value,
                 Nacimento = dtpFechaNacimiento.Value,
                 NumeroINSS = txtINSS.Text.Trim(),
@@ -120,6 +122,92 @@ namespace Proyecto_nomina
         private async void RegistroEmpleadoForm_Load(object sender, EventArgs e)
         {
             await LoadEmpleadosAsync();
-        }                                                                    
+        }
+
+        private async void btnActualizar_Click(object sender, EventArgs e)
+        {
+            if (dgvRegistroEmpleado.SelectedRows.Count > 0)
+            {
+                var selectedEmpleado = (EmpleadoDto)dgvRegistroEmpleado.SelectedRows[0].DataBoundItem;
+
+                var updateEmpleado = GetValues();
+                updateEmpleado.Id = selectedEmpleado.Id;
+                updateEmpleado.FechaTerminacion = selectedEmpleado.FechaTerminacion;
+
+                try
+                {
+                    var response = await _apiClient.Empleados.UpdateAsync(selectedEmpleado.Id, updateEmpleado);
+
+                    if (!response)
+                    {
+                        MessageBox.Show(
+                            "Ocurrio un error al actualizar el empleado",
+                            "Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
+                        );
+
+                        return;
+                    }
+
+                    MessageBox.Show(
+                        "Empleado actualizado correctamente",
+                        "Exito",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+
+                    ClearInputs();
+                    await LoadEmpleadosAsync();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        $"Ocurrio un error al actualizar el empleado {ex.Message}",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                }
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Seleccione un empleado para actualizar",
+                    "Advertencia",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+            }
+        }
+
+        private void dgvRegistroEmpleado_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if(e.RowIndex > 0)
+            {
+                var selectedEmpleado = (EmpleadoDto)dgvRegistroEmpleado.SelectedRows[0].DataBoundItem;
+                SetValues(selectedEmpleado);
+            }
+        }
+
+        private void SetValues(EmpleadoDto dto)
+        {
+            txtCargo.Text = dto.Cargo;
+            txtCedula.Text = dto.Cedula;
+            ntxtCelular.Text = dto.Celular;
+            txtCodigoEmpleado.Text = dto.CodigoEmpleado;
+            txtDireccion.Text = dto.Direccion;
+            cboEstado.SelectedIndex = dto.Estado ? 1 : 0;
+            cboEstadoCivil.SelectedIndex = dto.EstadoCivil == "Soltero/a" ? 0 : 1;
+            dtpFechaContratacion.Value = dto.FechaContratacion;
+            dtpFechaNacimiento.Value = dto.Nacimento;
+            txtINSS.Text = dto.NumeroINSS;
+            txtRUC.Text = dto.NumeroRUC;
+            txtApellido.Text = dto.PrimerApellido;
+            txtNombre.Text = dto.PrimerNombre;
+            rdbMasculino.Checked = dto.Sexo == "Masculino" ? true: false;
+            rdbFemenino.Checked = dto.Sexo == "Femenino" ? true : false;
+            mtxtTelefono.Text = dto.Telefono;
+        }
     }
 }

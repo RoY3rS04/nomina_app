@@ -9,6 +9,7 @@ namespace SharedModels.DTOs.Deducciones
 {
     public class DeduccionesUpdateDto
     {
+        public int Id { get; set; }
         public int EmpleadoId { get; set; }
         public double Prestamos { get; set; }
         public double Anticipos { get; set; }

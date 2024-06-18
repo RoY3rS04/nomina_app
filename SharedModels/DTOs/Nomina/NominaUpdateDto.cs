@@ -9,6 +9,7 @@ namespace SharedModels.DTOs.Nomina
 {
     public class NominaUpdateDto
     {
+        public int Id { get; set; }
         [Required]
         public int EmpleadoId { get; set; }
 

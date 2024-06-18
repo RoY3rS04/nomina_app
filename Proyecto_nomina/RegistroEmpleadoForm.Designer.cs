@@ -147,6 +147,7 @@
             btnActualizar.Text = "Actualizar";
             btnActualizar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnActualizar.UseVisualStyleBackColor = true;
+            btnActualizar.Click += btnActualizar_Click;
             // 
             // btnGuardar
             // 
@@ -248,8 +249,10 @@
             dgvRegistroEmpleado.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvRegistroEmpleado.Location = new Point(7, 285);
             dgvRegistroEmpleado.Name = "dgvRegistroEmpleado";
+            dgvRegistroEmpleado.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvRegistroEmpleado.Size = new Size(738, 190);
             dgvRegistroEmpleado.TabIndex = 113;
+            dgvRegistroEmpleado.CellClick += dgvRegistroEmpleado_CellClick;
             // 
             // cboEstado
             // 

@@ -72,7 +72,7 @@ namespace Proyecto_nomina
                     MessageBoxIcon.Information
                 );
 
-                menu.Show();
+               menu.Show();
             } catch(Exception ex)
             {
                 MessageBox.Show(
