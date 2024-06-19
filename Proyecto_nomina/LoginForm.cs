@@ -72,6 +72,9 @@ namespace Proyecto_nomina
                     MessageBoxIcon.Information
                 );
 
+                txtEmail.Text = "";
+                txtPassword.Text = "";
+
                menu.Show();
             } catch(Exception ex)
             {

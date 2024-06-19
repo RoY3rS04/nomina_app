@@ -57,9 +57,9 @@ namespace Proyecto_nomina
             }
         }
 
-        public async Task<Response<IEnumerable<T>>> GetAllAsync()
+        public async Task<Response<IEnumerable<T>>> GetAllAsync(string? queryParams = null)
         {
-            var response = await _httpClient.GetAsync(_endpoint);
+            var response = await _httpClient.GetAsync($"{_endpoint}?{queryParams}");
 
             if (response.IsSuccessStatusCode)
             {

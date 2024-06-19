@@ -9,7 +9,7 @@ namespace Proyecto_nomina
 {
     public interface IRepository<T>
     {
-        Task<Response<IEnumerable<T>>> GetAllAsync();
+        Task<Response<IEnumerable<T>>> GetAllAsync(string? queryParams = null);
         Task<Response<T>> GetByIdAsync(int id);
         Task<Response<T>> CreateAsync(object dto);
         Task<bool> UpdateAsync(int id, object dto);

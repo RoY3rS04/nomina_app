@@ -9,6 +9,7 @@ using SharedModels.DTOs;
 using SharedModels.DTOs.Deducciones;
 using SharedModels.DTOs.Empleado;
 using SharedModels.DTOs.Ingresos;
+using SharedModels.DTOs.Nomina;
 using SharedModels.DTOs.User;
 
 namespace Proyecto_nomina
@@ -20,7 +21,7 @@ namespace Proyecto_nomina
         public IRepository<EmpleadoDto> Empleados { get; }
         public IRepository<IngresosDto> Ingresos { get; }
         public IRepository<DeduccionesDto> Deducciones { get; }
-        public IRepository<Nomina> Nominas {  get; }
+        public IRepository<NominaDto> Nominas {  get; }
 
         public ApiClient()
         {
@@ -30,7 +31,7 @@ namespace Proyecto_nomina
             Empleados = new Repository<EmpleadoDto>(_httpClient, "Empleado");
             Ingresos = new Repository<IngresosDto>(_httpClient, "Ingresos");
             Deducciones = new Repository<DeduccionesDto>(_httpClient, "Deducciones");
-            Nominas = new Repository<Nomina>(_httpClient, "Nomina");
+            Nominas = new Repository<NominaDto>(_httpClient, "Nomina");
         }
 
     }

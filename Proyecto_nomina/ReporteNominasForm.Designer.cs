@@ -29,6 +29,11 @@
         private void InitializeComponent()
         {
             dgvReporteNominas = new DataGridView();
+            lblEmpleado = new Label();
+            lblFecha = new Label();
+            cmbEmpleado = new ComboBox();
+            dtpFecha = new DateTimePicker();
+            btnSearch = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvReporteNominas).BeginInit();
             SuspendLayout();
             // 
@@ -37,23 +42,78 @@
             dgvReporteNominas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvReporteNominas.Location = new Point(30, 140);
             dgvReporteNominas.Name = "dgvReporteNominas";
-            dgvReporteNominas.Size = new Size(699, 186);
+            dgvReporteNominas.Size = new Size(699, 242);
             dgvReporteNominas.TabIndex = 2;
+            // 
+            // lblEmpleado
+            // 
+            lblEmpleado.AutoSize = true;
+            lblEmpleado.Location = new Point(30, 35);
+            lblEmpleado.Name = "lblEmpleado";
+            lblEmpleado.Size = new Size(63, 15);
+            lblEmpleado.TabIndex = 3;
+            lblEmpleado.Text = "Empleado:";
+            // 
+            // lblFecha
+            // 
+            lblFecha.AutoSize = true;
+            lblFecha.Location = new Point(380, 38);
+            lblFecha.Name = "lblFecha";
+            lblFecha.Size = new Size(103, 15);
+            lblFecha.TabIndex = 4;
+            lblFecha.Text = "Fecha Realizacion:";
+            // 
+            // cmbEmpleado
+            // 
+            cmbEmpleado.FormattingEnabled = true;
+            cmbEmpleado.Location = new Point(112, 32);
+            cmbEmpleado.Name = "cmbEmpleado";
+            cmbEmpleado.Size = new Size(238, 23);
+            cmbEmpleado.TabIndex = 5;
+            cmbEmpleado.Format += cmbEmpleado_Format;
+            // 
+            // dtpFecha
+            // 
+            dtpFecha.Location = new Point(503, 32);
+            dtpFecha.Name = "dtpFecha";
+            dtpFecha.Size = new Size(226, 23);
+            dtpFecha.TabIndex = 6;
+            // 
+            // btnSearch
+            // 
+            btnSearch.Location = new Point(30, 76);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(699, 41);
+            btnSearch.TabIndex = 7;
+            btnSearch.Text = "Buscar Nominas";
+            btnSearch.UseVisualStyleBackColor = true;
             // 
             // ReporteNominasForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(764, 453);
+            Controls.Add(btnSearch);
+            Controls.Add(dtpFecha);
+            Controls.Add(cmbEmpleado);
+            Controls.Add(lblFecha);
+            Controls.Add(lblEmpleado);
             Controls.Add(dgvReporteNominas);
             Name = "ReporteNominasForm";
             Text = "ReporteNominasForm";
+            Load += ReporteNominasForm_Load;
             ((System.ComponentModel.ISupportInitialize)dgvReporteNominas).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private DataGridView dgvReporteNominas;
+        private Label lblEmpleado;
+        private Label lblFecha;
+        private ComboBox cmbEmpleado;
+        private DateTimePicker dtpFecha;
+        private Button btnSearch;
     }
 }

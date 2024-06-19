@@ -23,7 +23,7 @@ namespace NominaAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<NominasResponse> GetAll(int? id, string? fechaRealizacion)
+        public async Task<Response<List<NominaDto>>> GetAll(int? id, string? fechaRealizacion)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace NominaAPI.Services
                 {
                     if (!await _nominaRepository.ExistsAsync(e => e.Id == id))
                     {
-                        return new NominasResponse
+                        return new Response<List<NominaDto>>
                         {
                             StatusCode = StatusCodes.Status400BadRequest,
                             Message = $"No existe nómina con id: {id}"
@@ -63,16 +63,16 @@ namespace NominaAPI.Services
                     nominas = await _nominaRepository.GetAllAsync();
                 }
 
-                return new NominasResponse
+                return new Response<List<NominaDto>>
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Nóminas obtenidas correctamente",
-                    Nomina = _mapper.Map<List<NominaDto>>(nominas)
+                    Data = _mapper.Map<List<NominaDto>>(nominas)
                 };
             }
             catch (FormatException)
             {
-                return new NominasResponse
+                return new Response<List<NominaDto>>
                 {
                     Message = "Fecha inválida",
                     StatusCode = StatusCodes.Status400BadRequest,
@@ -80,7 +80,7 @@ namespace NominaAPI.Services
             }
             catch (Exception)
             {
-                return new NominasResponse
+                return new Response<List<NominaDto>>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Error al obtener las nóminas"
@@ -89,11 +89,11 @@ namespace NominaAPI.Services
         }
 
 
-        public async Task<NominaResponse> GetById(int id)
+        public async Task<Response<NominaDto>> GetById(int id)
         {
             if (id <= 0)
             {
-                return new NominaResponse
+                return new Response<NominaDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "El id debe ser un número positivo"
@@ -106,23 +106,23 @@ namespace NominaAPI.Services
 
                 if (nomina == null)
                 {
-                    return new NominaResponse
+                    return new Response<NominaDto>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = $"No existe una nómina con id: {id}"
                     };
                 }
 
-                return new NominaResponse
+                return new Response<NominaDto>
                 {
-                    Nomina = _mapper.Map<NominaDto>(nomina),
+                    Data = _mapper.Map<NominaDto>(nomina),
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Nómina obtenida correctamente"
                 };
             }
             catch (Exception)
             {
-                return new NominaResponse
+                return new Response<NominaDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Hubo un error al obtener la nómina"
@@ -131,11 +131,11 @@ namespace NominaAPI.Services
         }
 
 
-        public async Task<NominaResponse> Create(NominaCreateDto createDto, ControllerBase controller)
+        public async Task<Response<NominaDto>> Create(NominaCreateDto createDto, ControllerBase controller)
         {
             if (createDto == null)
             {
-                return new NominaResponse
+                return new Response<NominaDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "Por favor ingrese la información requerida"
@@ -146,7 +146,7 @@ namespace NominaAPI.Services
             {
                 if (!controller.ModelState.IsValid)
                 {
-                    return new NominaResponse
+                    return new Response<NominaDto>
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
                         Message = "Proporcione la información requerida"
@@ -157,16 +157,16 @@ namespace NominaAPI.Services
 
                 await _nominaRepository.CreateAsync(newNomina);
 
-                return new NominaResponse
+                return new Response<NominaDto>
                 {
-                    Nomina = _mapper.Map<NominaDto>(newNomina),
+                    Data = _mapper.Map<NominaDto>(newNomina),
                     StatusCode = StatusCodes.Status201Created,
                     Message = "Nómina creada correctamente!"
                 };
             }
             catch (Exception e)
             {
-                return new NominaResponse
+                return new Response<NominaDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Hubo un error al intentar crear la nómina"
@@ -175,7 +175,7 @@ namespace NominaAPI.Services
         }
 
 
-        public async Task<NominaResponse> Update(
+        public async Task<Response<NominaDto>> Update(
             int id,
             JsonPatchDocument<NominaUpdateDto> updatePatch,
             ControllerBase controller
@@ -183,7 +183,7 @@ namespace NominaAPI.Services
         {
             if (id <= 0)
             {
-                return new NominaResponse
+                return new Response<NominaDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "El id debe de ser un numero positivo"
@@ -196,7 +196,7 @@ namespace NominaAPI.Services
 
                 if (nomina == null)
                 {
-                    return new NominaResponse
+                    return new Response<NominaDto>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = "No existe nómina con el id recibido"
@@ -209,7 +209,7 @@ namespace NominaAPI.Services
 
                 if (!controller.ModelState.IsValid)
                 {
-                    return new NominaResponse
+                    return new Response<NominaDto>
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
                         Message = "Modelo de nómina inválido"
@@ -225,9 +225,9 @@ namespace NominaAPI.Services
                         await _nominaRepository.SaveChangesAsync();
                         transaction.Commit();
 
-                        return new NominaResponse
+                        return new Response<NominaDto>
                         {
-                            Nomina = _mapper.Map<NominaDto>(nomina),
+                            Data = _mapper.Map<NominaDto>(nomina),
                             StatusCode = StatusCodes.Status200OK,
                             Message = "Nómina actualizada correctamente"
                         };
@@ -236,14 +236,14 @@ namespace NominaAPI.Services
                     {
                         if (!await _nominaRepository.ExistsAsync(e => e.Id == id))
                         {
-                            return new NominaResponse
+                            return new Response<NominaDto>
                             {
                                 StatusCode = StatusCodes.Status404NotFound,
                                 Message = "No hay nómina con ese id"
                             };
                         }
 
-                        return new NominaResponse
+                        return new Response<NominaDto>
                         {
                             StatusCode = StatusCodes.Status500InternalServerError,
                             Message = "Error al actualizar la nómina"
@@ -252,7 +252,7 @@ namespace NominaAPI.Services
                     catch (Exception)
                     {
                         transaction.Rollback();
-                        return new NominaResponse
+                        return new Response<NominaDto>
                         {
                             StatusCode = StatusCodes.Status500InternalServerError,
                             Message = "Error al actualizar la nómina"
@@ -262,7 +262,7 @@ namespace NominaAPI.Services
             }
             catch (Exception)
             {
-                return new NominaResponse
+                return new Response<NominaDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Error al actualizar la nómina"
@@ -271,11 +271,11 @@ namespace NominaAPI.Services
         }
 
 
-        public async Task<NominaResponse> Delete(int id)
+        public async Task<Response<NominaDto>> Delete(int id)
         {
             if (id <= 0)
             {
-                return new NominaResponse
+                return new Response<NominaDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "El id debe de ser un numero positivo"
@@ -288,7 +288,7 @@ namespace NominaAPI.Services
 
                 if (nomina == null)
                 {
-                    return new NominaResponse
+                    return new Response<NominaDto>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = "No existe nómina con ese id"
@@ -299,7 +299,7 @@ namespace NominaAPI.Services
 
                 await _nominaRepository.DeleteRangeAsync(relatedNominas);
 
-                return new NominaResponse
+                return new Response<NominaDto>
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Nómina y sus relacionadas eliminadas correctamente"
@@ -307,7 +307,7 @@ namespace NominaAPI.Services
             }
             catch (Exception)
             {
-                return new NominaResponse
+                return new Response<NominaDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Hubo un error al borrar la nómina"

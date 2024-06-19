@@ -89,7 +89,7 @@ namespace Proyecto_nomina
 
         private void btnCerrar_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            Close();
         }
 
         private void btnRegistroEmpleadoForm_Click(object sender, EventArgs e)

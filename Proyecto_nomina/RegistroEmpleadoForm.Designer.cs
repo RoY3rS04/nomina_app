@@ -45,7 +45,6 @@
             rdbMasculino = new RadioButton();
             dtpFechaNacimiento = new DateTimePicker();
             cboEstadoCivil = new ComboBox();
-            txtSalarioOrdinario = new TextBox();
             ntxtCelular = new MaskedTextBox();
             txtDireccion = new TextBox();
             mtxtTelefono = new MaskedTextBox();
@@ -56,7 +55,6 @@
             txtCedula = new TextBox();
             txtCodigoEmpleado = new TextBox();
             label16 = new Label();
-            label15 = new Label();
             label14 = new Label();
             label13 = new Label();
             label12 = new Label();
@@ -191,7 +189,6 @@
             groupBox1.Controls.Add(rdbMasculino);
             groupBox1.Controls.Add(dtpFechaNacimiento);
             groupBox1.Controls.Add(cboEstadoCivil);
-            groupBox1.Controls.Add(txtSalarioOrdinario);
             groupBox1.Controls.Add(ntxtCelular);
             groupBox1.Controls.Add(txtDireccion);
             groupBox1.Controls.Add(mtxtTelefono);
@@ -202,7 +199,6 @@
             groupBox1.Controls.Add(txtCedula);
             groupBox1.Controls.Add(txtCodigoEmpleado);
             groupBox1.Controls.Add(label16);
-            groupBox1.Controls.Add(label15);
             groupBox1.Controls.Add(label14);
             groupBox1.Controls.Add(label13);
             groupBox1.Controls.Add(label12);
@@ -229,7 +225,7 @@
             // txtCargo
             // 
             txtCargo.Font = new Font("Segoe UI", 9.75F);
-            txtCargo.Location = new Point(620, 170);
+            txtCargo.Location = new Point(620, 126);
             txtCargo.Name = "txtCargo";
             txtCargo.Size = new Size(100, 25);
             txtCargo.TabIndex = 115;
@@ -239,7 +235,7 @@
             label17.AutoSize = true;
             label17.Font = new Font("Segoe UI", 9.75F);
             label17.ForeColor = Color.Black;
-            label17.Location = new Point(508, 173);
+            label17.Location = new Point(508, 129);
             label17.Name = "label17";
             label17.Size = new Size(47, 17);
             label17.TabIndex = 114;
@@ -262,7 +258,7 @@
             cboEstado.Font = new Font("Segoe UI", 9.75F);
             cboEstado.FormattingEnabled = true;
             cboEstado.Items.AddRange(new object[] { "Activo/a", "Inactivo/a" });
-            cboEstado.Location = new Point(620, 210);
+            cboEstado.Location = new Point(620, 166);
             cboEstado.Name = "cboEstado";
             cboEstado.Size = new Size(100, 25);
             cboEstado.TabIndex = 112;
@@ -336,14 +332,6 @@
             cboEstadoCivil.Name = "cboEstadoCivil";
             cboEstadoCivil.Size = new Size(100, 25);
             cboEstadoCivil.TabIndex = 106;
-            // 
-            // txtSalarioOrdinario
-            // 
-            txtSalarioOrdinario.Font = new Font("Segoe UI", 9.75F);
-            txtSalarioOrdinario.Location = new Point(620, 130);
-            txtSalarioOrdinario.Name = "txtSalarioOrdinario";
-            txtSalarioOrdinario.Size = new Size(100, 25);
-            txtSalarioOrdinario.TabIndex = 104;
             // 
             // ntxtCelular
             // 
@@ -424,22 +412,11 @@
             label16.AutoSize = true;
             label16.Font = new Font("Segoe UI", 9.75F);
             label16.ForeColor = Color.Black;
-            label16.Location = new Point(508, 210);
+            label16.Location = new Point(508, 166);
             label16.Name = "label16";
             label16.Size = new Size(51, 17);
             label16.TabIndex = 88;
             label16.Text = "Estado:";
-            // 
-            // label15
-            // 
-            label15.AutoSize = true;
-            label15.Font = new Font("Segoe UI", 9.75F);
-            label15.ForeColor = Color.Black;
-            label15.Location = new Point(508, 134);
-            label15.Name = "label15";
-            label15.Size = new Size(111, 17);
-            label15.TabIndex = 87;
-            label15.Text = "Salario Ordinario:";
             // 
             // label14
             // 

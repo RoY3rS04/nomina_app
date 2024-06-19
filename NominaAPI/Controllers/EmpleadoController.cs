@@ -37,9 +37,9 @@ namespace NominaAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<Response<List<EmpleadoDto>>>> GetAll()
+        public async Task<ActionResult<Response<List<EmpleadoDto>>>> GetAll(string? codigoEmp, string? cedulaEmp)
         {
-            var response = await _empleadoService.GetAll();
+            var response = await _empleadoService.GetAll(codigoEmp, cedulaEmp);
 
             return response.SendResponse(this);
         }

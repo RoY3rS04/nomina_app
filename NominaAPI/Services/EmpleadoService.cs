@@ -34,12 +34,35 @@ namespace NominaAPI.Services
             _nominaRepository = nominaRepository;
         }
 
-        public async Task<Response<List<EmpleadoDto>>> GetAll()
+        public async Task<Response<List<EmpleadoDto>>> GetAll(string? codigoEmp, string? cedulaEmp)
         {
             try
             {
 
-                var empleados = await _empleadoRepository.GetAllAsync();
+                List<Empleado> empleados;
+
+                if (codigoEmp != null && cedulaEmp != null)
+                {
+                    empleados = await _empleadoRepository.GetAllAsync(
+                        e => e.CodigoEmpleado == codigoEmp && e.Cedula == cedulaEmp
+                    );
+                }
+                else if (codigoEmp != null)
+                {
+                    empleados = await _empleadoRepository.GetAllAsync(
+                        e => e.CodigoEmpleado == codigoEmp
+                    );
+                }
+                else if (cedulaEmp != null)
+                {
+                    empleados = await _empleadoRepository.GetAllAsync(
+                        e => e.Cedula == cedulaEmp
+                    );
+                }
+                else
+                {
+                    empleados = await _empleadoRepository.GetAllAsync();
+                }
 
                 return new Response<List<EmpleadoDto>>
                 {
