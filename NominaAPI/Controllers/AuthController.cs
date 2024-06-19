@@ -18,10 +18,10 @@ namespace NominaAPI.Controllers
         private readonly Repository<User> _userRepository;
         private readonly AuthService _authService;
 
-        public AuthController(Repository<User> userRepository, IMapper mapper)
+        public AuthController(Repository<User> userRepository, IMapper mapper, IConfiguration config)
         {
             _userRepository = userRepository;
-            _authService = new AuthService(_userRepository, mapper);
+            _authService = new AuthService(_userRepository, mapper, config);
         }
 
         [HttpPost]

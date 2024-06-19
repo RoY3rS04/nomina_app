@@ -16,12 +16,10 @@ namespace Proyecto_nomina
 {
     public partial class LoginForm : Form
     {
-        private ApiClient _apiClient;
 
         public LoginForm()
         {
             InitializeComponent();
-            _apiClient = new ApiClient();
         }
 
         private void btnCerrar_Click(object sender, EventArgs e)
@@ -49,7 +47,7 @@ namespace Proyecto_nomina
                 var response = await http.PostAsync("Auth", content);
 
                 var dataString = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<UserResponse>(dataString);
+                var data = JsonConvert.DeserializeObject<TokenResponse>(dataString);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -63,7 +61,7 @@ namespace Proyecto_nomina
                     return;
                 }
 
-                MenuForm menu = new MenuForm(data.User);
+                MenuForm menu = new MenuForm(data.Token);
 
                 MessageBox.Show(
                     "Usuario authenticado correctamente!",
@@ -79,7 +77,7 @@ namespace Proyecto_nomina
             } catch(Exception ex)
             {
                 MessageBox.Show(
-                    "Hubo un error al loggearse",
+                    $"Hubo un error al loggearse {ex.Message}",
                     "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error

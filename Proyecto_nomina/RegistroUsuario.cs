@@ -12,9 +12,12 @@ namespace Proyecto_nomina
 {
     public partial class RegistroUsuario : Form
     {
-        public RegistroUsuario()
+        private ApiClient _apiClient;
+
+        public RegistroUsuario(ApiClient apiClient)
         {
             InitializeComponent();
+            _apiClient = apiClient;
         }
 
         

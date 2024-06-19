@@ -14,10 +14,10 @@ namespace Proyecto_nomina
     {
         private ApiClient _apiClient;
 
-        public ReporteEmpleadosForm()
+        public ReporteEmpleadosForm(ApiClient apiClient)
         {
             InitializeComponent();
-            _apiClient = new ApiClient();
+            _apiClient = apiClient;
         }
 
         private async void ReporteEmpleadosForm_Load(object sender, EventArgs e)

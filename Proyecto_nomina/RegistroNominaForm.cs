@@ -12,9 +12,11 @@ namespace Proyecto_nomina
 {
     public partial class RegistroNominaForm : Form
     {
-        public RegistroNominaForm()
+        private readonly ApiClient _apiClient;
+        public RegistroNominaForm(ApiClient apiClient)
         {
             InitializeComponent();
+            _apiClient = apiClient;
         }
 
         private void groupBox2_Enter(object sender, EventArgs e)

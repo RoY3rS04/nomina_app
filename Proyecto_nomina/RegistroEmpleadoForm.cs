@@ -18,10 +18,10 @@ namespace Proyecto_nomina
 
         private readonly ApiClient _apiClient;
 
-        public RegistroEmpleadoForm()
+        public RegistroEmpleadoForm(ApiClient apiClient)
         {
             InitializeComponent();
-            _apiClient = new ApiClient();
+            _apiClient = apiClient;
         }
 
         private async void btnNuevo_Click(object sender, EventArgs e)

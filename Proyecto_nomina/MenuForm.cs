@@ -14,8 +14,9 @@ namespace Proyecto_nomina
 {
     public partial class MenuForm : Form
     {
-        private UserDto _authUser;
-        public MenuForm(UserDto user)
+        public ApiClient _apiClient;
+
+        public MenuForm(string jwtToken)
         {
             InitializeComponent();
 
@@ -25,14 +26,15 @@ namespace Proyecto_nomina
             tmContraerMenu.Interval = 15;
             tmContraerMenu.Tick += new EventHandler(tmContraerMenu_Tick);
 
-            _authUser = user;
+            _apiClient = new ApiClient(jwtToken);
 
-            if(!_authUser.IsAdmin)
+
+            /*if(!_authUser.IsAdmin)
             {
                 btnRegistroEmpleadoForm.Visible = false;
                 btnRegistroNominaForm.Visible = false;
                 btnRegistroUsuarioForm.Visible = false;
-            }
+            }*/
         }
 
         int lx, ly;
@@ -94,7 +96,7 @@ namespace Proyecto_nomina
 
         private void btnRegistroEmpleadoForm_Click(object sender, EventArgs e)
         {
-            RegistroEmpleadoForm frm = new RegistroEmpleadoForm();
+            RegistroEmpleadoForm frm = new RegistroEmpleadoForm(_apiClient);
             AbrirFormEnPanel(frm);
         }
 
@@ -112,7 +114,7 @@ namespace Proyecto_nomina
 
         private void btnRegistroNominaForm_Click(object sender, EventArgs e)
         {
-            RegistroNominaForm frm = new RegistroNominaForm();
+            RegistroNominaForm frm = new RegistroNominaForm(_apiClient);
             AbrirFormEnPanel2(frm);
         }
 
@@ -130,7 +132,7 @@ namespace Proyecto_nomina
 
         private void btnReportes_Click(object sender, EventArgs e)
         {
-            ReportesForm frm = new ReportesForm();
+            ReportesForm frm = new ReportesForm(_apiClient);
             AbrirFormEnPanel3(frm);
         }
 
@@ -148,7 +150,7 @@ namespace Proyecto_nomina
 
         private void btnRegistroUsuarioForm_Click(object sender, EventArgs e)
         {
-            RegistroUsuario frm = new RegistroUsuario();
+            RegistroUsuario frm = new RegistroUsuario(_apiClient);
             AbrirFormEnPanel4(frm);
 
         }

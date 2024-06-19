@@ -12,14 +12,16 @@ namespace Proyecto_nomina
 {
     public partial class ReportesForm : Form
     {
-        public ReportesForm()
+        private ApiClient _apiClient;
+        public ReportesForm(ApiClient apiClient)
         {
             InitializeComponent();
+            _apiClient = apiClient;
         }
 
         private void btnReporteEmpleadosFrom_Click(object sender, EventArgs e)
         {
-            ReporteEmpleadosForm frm = new ReporteEmpleadosForm();
+            ReporteEmpleadosForm frm = new ReporteEmpleadosForm(_apiClient);
             AbrirFormEnPanel(frm);
         }
 
@@ -37,7 +39,7 @@ namespace Proyecto_nomina
 
         private void btnReporteNominasForm_Click(object sender, EventArgs e)
         {
-            ReporteNominasForm frm = new ReporteNominasForm();
+            ReporteNominasForm frm = new ReporteNominasForm(_apiClient);
             AbrirFormEnPanel2(frm);
         }
 
