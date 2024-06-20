@@ -23,33 +23,33 @@ namespace NominaAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<Response<List<NominaDto>>> GetAll(int? id, string? fechaRealizacion)
+        public async Task<Response<List<NominaDto>>> GetAll(int? empleadoId, string? fechaRealizacion)
         {
             try
             {
                 List<Nomina> nominas;
 
-                if (fechaRealizacion != null && id != null)
+                if (fechaRealizacion != null && empleadoId != null)
                 {
                     DateTime realDate = DateTime.Parse(fechaRealizacion);
 
                     nominas = await _nominaRepository
-                        .GetAllAsync(i => i.EmpleadoId == id && (i.FechaRealizacion.Year == realDate.Year &&
+                        .GetAllAsync(i => i.EmpleadoId == empleadoId && (i.FechaRealizacion.Year == realDate.Year &&
                         i.FechaRealizacion.Month == realDate.Month));
                 }
-                else if (id != null)
+                else if (empleadoId != null)
                 {
-                    if (!await _nominaRepository.ExistsAsync(e => e.Id == id))
+                    if (!await _nominaRepository.ExistsAsync(e => e.EmpleadoId == empleadoId))
                     {
                         return new Response<List<NominaDto>>
                         {
                             StatusCode = StatusCodes.Status400BadRequest,
-                            Message = $"No existe nómina con id: {id}"
+                            Message = $"No existe nómina con id: {empleadoId}"
                         };
                     }
 
                     nominas = await _nominaRepository
-                        .GetAllAsync(i => i.EmpleadoId == id);
+                        .GetAllAsync(i => i.EmpleadoId == empleadoId);
                 }
                 else if (fechaRealizacion != null)
                 {

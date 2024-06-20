@@ -34,6 +34,7 @@
             cmbEmpleado = new ComboBox();
             dtpFecha = new DateTimePicker();
             btnSearch = new Button();
+            checkTodos = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)dgvReporteNominas).BeginInit();
             SuspendLayout();
             // 
@@ -57,7 +58,7 @@
             // lblFecha
             // 
             lblFecha.AutoSize = true;
-            lblFecha.Location = new Point(380, 38);
+            lblFecha.Location = new Point(240, 35);
             lblFecha.Name = "lblFecha";
             lblFecha.Size = new Size(103, 15);
             lblFecha.TabIndex = 4;
@@ -68,15 +69,16 @@
             cmbEmpleado.FormattingEnabled = true;
             cmbEmpleado.Location = new Point(112, 32);
             cmbEmpleado.Name = "cmbEmpleado";
-            cmbEmpleado.Size = new Size(238, 23);
+            cmbEmpleado.Size = new Size(108, 23);
             cmbEmpleado.TabIndex = 5;
             cmbEmpleado.Format += cmbEmpleado_Format;
             // 
             // dtpFecha
             // 
-            dtpFecha.Location = new Point(503, 32);
+            dtpFecha.Location = new Point(358, 32);
             dtpFecha.Name = "dtpFecha";
-            dtpFecha.Size = new Size(226, 23);
+            dtpFecha.ShowCheckBox = true;
+            dtpFecha.Size = new Size(181, 23);
             dtpFecha.TabIndex = 6;
             // 
             // btnSearch
@@ -87,12 +89,25 @@
             btnSearch.TabIndex = 7;
             btnSearch.Text = "Buscar Nominas";
             btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click;
+            // 
+            // checkTodos
+            // 
+            checkTodos.AutoSize = true;
+            checkTodos.Location = new Point(593, 36);
+            checkTodos.Name = "checkTodos";
+            checkTodos.Size = new Size(136, 19);
+            checkTodos.TabIndex = 8;
+            checkTodos.Text = "Todos los empleados";
+            checkTodos.UseVisualStyleBackColor = true;
+            checkTodos.CheckedChanged += checkTodos_CheckedChanged;
             // 
             // ReporteNominasForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(764, 453);
+            Controls.Add(checkTodos);
             Controls.Add(btnSearch);
             Controls.Add(dtpFecha);
             Controls.Add(cmbEmpleado);
@@ -115,5 +130,6 @@
         private ComboBox cmbEmpleado;
         private DateTimePicker dtpFecha;
         private Button btnSearch;
+        private CheckBox checkTodos;
     }
 }

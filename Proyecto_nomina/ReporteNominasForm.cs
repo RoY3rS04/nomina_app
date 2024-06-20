@@ -1,4 +1,6 @@
-﻿using SharedModels.DTOs.Empleado;
+﻿using NominaAPI.Http.Responses;
+using SharedModels.DTOs.Empleado;
+using SharedModels.DTOs.Nomina;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -70,6 +72,47 @@ namespace Proyecto_nomina
             string lastName = ((EmpleadoDto)e.ListItem).PrimerApellido;
 
             e.Value = firstName + " " + lastName;
+        }
+
+        private void checkTodos_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkTodos.Checked)
+            {
+                cmbEmpleado.Enabled = false;
+                return;
+            }
+
+            cmbEmpleado.Enabled = true;
+        }
+
+        private async void btnSearch_Click(object sender, EventArgs e)
+        {
+            Response<IEnumerable<NominaDto>> response;
+
+            try
+            {
+                if (checkTodos.Checked)
+                {
+                    string queryParams = $"empleadoId={null}&fechaRealizacion={(dtpFecha.Checked ? dtpFecha.Value : null)}";
+                    response = await _apiClient.Nominas.GetAllAsync(queryParams);
+                }
+                else
+                {
+                    string queryParams = $"empleadoId={cmbEmpleado.SelectedValue}&fechaRealizacion={(dtpFecha.Checked ? dtpFecha.Value : null)}";
+                    response = await _apiClient.Nominas.GetAllAsync(queryParams);
+                }
+
+                dgvReporteNominas.DataSource = response.Data;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Hubo un error al obtener las nominas: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
     }
 }

@@ -132,7 +132,7 @@ namespace Proyecto_nomina
 
                 var updateEmpleado = GetValues();
                 updateEmpleado.Id = selectedEmpleado.Id;
-                updateEmpleado.FechaTerminacion = selectedEmpleado.FechaTerminacion;
+                updateEmpleado.FechaTerminacion = dtpFechaTerminacion.Value;
 
                 try
                 {
@@ -197,7 +197,7 @@ namespace Proyecto_nomina
             ntxtCelular.Text = dto.Celular;
             txtCodigoEmpleado.Text = dto.CodigoEmpleado;
             txtDireccion.Text = dto.Direccion;
-            cboEstado.SelectedIndex = dto.Estado ? 1 : 0;
+            cboEstado.SelectedIndex = dto.Estado ? 0 : 1;
             cboEstadoCivil.SelectedIndex = dto.EstadoCivil == "Soltero/a" ? 0 : 1;
             dtpFechaContratacion.Value = dto.FechaContratacion;
             dtpFechaNacimiento.Value = dto.Nacimento;
