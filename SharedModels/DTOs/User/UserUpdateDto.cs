@@ -3,7 +3,8 @@ namespace SharedModels.DTOs.User
 {
     public class UserUpdateDto
     {
-
+        [Required]
+        public int Id { get; set; }
         [StringLength(50)]
         public string? Name { get; set; }
 

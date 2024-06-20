@@ -74,6 +74,7 @@
             dgvRegistroUsuario.Name = "dgvRegistroUsuario";
             dgvRegistroUsuario.Size = new Size(413, 134);
             dgvRegistroUsuario.TabIndex = 9;
+            dgvRegistroUsuario.CellClick += dgvRegistroUsuario_CellClick;
             // 
             // txtContraseña
             // 
@@ -203,6 +204,7 @@
             btnEliminar.Text = "Eliminar";
             btnEliminar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnEliminar.UseVisualStyleBackColor = true;
+            btnEliminar.Click += btnEliminar_Click;
             // 
             // btnActualizar
             // 
@@ -222,6 +224,7 @@
             btnActualizar.Text = "Actualizar";
             btnActualizar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnActualizar.UseVisualStyleBackColor = true;
+            btnActualizar.Click += btnActualizar_Click;
             // 
             // btnGuardar
             // 
@@ -241,6 +244,7 @@
             btnGuardar.Text = "Guardar";
             btnGuardar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnGuardar.UseVisualStyleBackColor = true;
+            btnGuardar.Click += btnGuardar_Click;
             // 
             // RegistroUsuario
             // 
@@ -251,6 +255,7 @@
             Controls.Add(panel1);
             Name = "RegistroUsuario";
             Text = "RegistroUsuario";
+            Load += RegistroUsuario_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvRegistroUsuario).EndInit();

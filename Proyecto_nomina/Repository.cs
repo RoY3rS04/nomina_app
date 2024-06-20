@@ -18,8 +18,8 @@ namespace Proyecto_nomina
 
         public Repository(HttpClient httpClient, string endpoint)
         {
-            _endpoint = endpoint;
-            _httpClient = httpClient;
+            _endpoint = endpoint ?? throw new ArgumentNullException(nameof(httpClient));
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(endpoint));
         }
 
         public async Task<Response<T>> CreateAsync(object dto)
@@ -90,24 +90,48 @@ namespace Proyecto_nomina
                 throw new Exception(jsonResponse.Message);
             }
         }
-
         public async Task<bool> UpdateAsync(int id, object dto)
         {
-            var json = JsonConvert.SerializeObject(dto);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PutAsync($"{_endpoint}/{id}", content);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                return true;
+                if (dto == null)
+                {
+                    throw new ArgumentNullException(nameof(dto));
+                }
+
+                var json = JsonConvert.SerializeObject(dto);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PutAsync($"{_endpoint}/{id}", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true; 
+                }
+                else
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    if (string.IsNullOrEmpty(errorResponse))
+                    {
+                        throw new Exception("Error desconocido al actualizar el recurso.");
+                    }
+
+                    var jsonResponse = JsonConvert.DeserializeObject<Response<T>>(errorResponse);
+                    if (jsonResponse == null || string.IsNullOrEmpty(jsonResponse.Message))
+                    {
+                        throw new Exception("Error desconocido al actualizar el recurso.");
+                    }
+
+                    throw new Exception(jsonResponse.Message);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var errorResponse = await response.Content.ReadAsStringAsync();
-                var jsonResponse = JsonConvert.DeserializeObject<Response<T>>(errorResponse);
-                throw new Exception(jsonResponse.Message);
+                Console.WriteLine(ex.ToString());
+                throw new Exception("Error al procesar la solicitud de actualización.", ex);
             }
         }
+
+
     }
 }

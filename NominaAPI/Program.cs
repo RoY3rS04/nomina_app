@@ -21,6 +21,8 @@ builder.Services.AddDbContext<NominaContext>(options =>
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddControllers().AddNewtonsoftJson();
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddScoped<Repository<User>>();
 builder.Services.AddScoped<Repository<Ingresos>>();
 builder.Services.AddScoped<Repository<Empleado>>();
@@ -53,7 +55,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    // Título (Diseño)
+    // Tï¿½tulo (Diseï¿½o)
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Software NominaApp", Version = "v1" });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
