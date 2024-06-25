@@ -72,6 +72,7 @@
             dgvRegistroUsuario.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvRegistroUsuario.Location = new Point(306, 43);
             dgvRegistroUsuario.Name = "dgvRegistroUsuario";
+            dgvRegistroUsuario.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvRegistroUsuario.Size = new Size(413, 134);
             dgvRegistroUsuario.TabIndex = 9;
             dgvRegistroUsuario.CellClick += dgvRegistroUsuario_CellClick;

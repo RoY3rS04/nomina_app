@@ -41,8 +41,6 @@
             txtAnticipos = new TextBox();
             label10 = new Label();
             groupBox2 = new GroupBox();
-            label13 = new Label();
-            label12 = new Label();
             txtBonos = new TextBox();
             txtComisiones = new TextBox();
             label5 = new Label();
@@ -66,8 +64,8 @@
             rdbMasculino = new RadioButton();
             dtpFechaNacimiento = new DateTimePicker();
             cboEstadoCivil = new ComboBox();
-            cboNocturnidad = new ComboBox();
-            cboRiesgoLaboral = new ComboBox();
+            ckNocturnidad = new CheckBox();
+            ckRiesgoLaboral = new CheckBox();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -246,10 +244,8 @@
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(cboRiesgoLaboral);
-            groupBox2.Controls.Add(cboNocturnidad);
-            groupBox2.Controls.Add(label13);
-            groupBox2.Controls.Add(label12);
+            groupBox2.Controls.Add(ckRiesgoLaboral);
+            groupBox2.Controls.Add(ckNocturnidad);
             groupBox2.Controls.Add(txtBonos);
             groupBox2.Controls.Add(txtComisiones);
             groupBox2.Controls.Add(label5);
@@ -273,28 +269,6 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "Ingresos";
             groupBox2.Enter += groupBox2_Enter;
-            // 
-            // label13
-            // 
-            label13.AutoSize = true;
-            label13.Font = new Font("Microsoft Sans Serif", 9.75F);
-            label13.ForeColor = Color.Black;
-            label13.Location = new Point(258, 167);
-            label13.Name = "label13";
-            label13.Size = new Size(103, 16);
-            label13.TabIndex = 109;
-            label13.Text = "Riesgo Laboral:";
-            // 
-            // label12
-            // 
-            label12.AutoSize = true;
-            label12.Font = new Font("Microsoft Sans Serif", 9.75F);
-            label12.ForeColor = Color.Black;
-            label12.Location = new Point(16, 165);
-            label12.Name = "label12";
-            label12.Size = new Size(83, 16);
-            label12.TabIndex = 107;
-            label12.Text = "Nocturnidad:";
             // 
             // txtBonos
             // 
@@ -437,6 +411,7 @@
             cboCodigoEmpleado.Name = "cboCodigoEmpleado";
             cboCodigoEmpleado.Size = new Size(126, 24);
             cboCodigoEmpleado.TabIndex = 75;
+            cboCodigoEmpleado.Format += cboCodigoEmpleado_Format;
             // 
             // label1
             // 
@@ -454,6 +429,7 @@
             dgvRegistroNomina.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvRegistroNomina.Location = new Point(8, 297);
             dgvRegistroNomina.Name = "dgvRegistroNomina";
+            dgvRegistroNomina.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvRegistroNomina.Size = new Size(738, 188);
             dgvRegistroNomina.TabIndex = 113;
             // 
@@ -519,23 +495,27 @@
             cboEstadoCivil.Size = new Size(100, 23);
             cboEstadoCivil.TabIndex = 106;
             // 
-            // cboNocturnidad
+            // ckNocturnidad
             // 
-            cboNocturnidad.Font = new Font("Microsoft Sans Serif", 9.75F);
-            cboNocturnidad.FormattingEnabled = true;
-            cboNocturnidad.Location = new Point(121, 165);
-            cboNocturnidad.Name = "cboNocturnidad";
-            cboNocturnidad.Size = new Size(126, 24);
-            cboNocturnidad.TabIndex = 110;
+            ckNocturnidad.AutoSize = true;
+            ckNocturnidad.ForeColor = SystemColors.ActiveCaptionText;
+            ckNocturnidad.Location = new Point(16, 164);
+            ckNocturnidad.Name = "ckNocturnidad";
+            ckNocturnidad.Size = new Size(93, 19);
+            ckNocturnidad.TabIndex = 112;
+            ckNocturnidad.Text = "Nocturnidad";
+            ckNocturnidad.UseVisualStyleBackColor = true;
             // 
-            // cboRiesgoLaboral
+            // ckRiesgoLaboral
             // 
-            cboRiesgoLaboral.Font = new Font("Microsoft Sans Serif", 9.75F);
-            cboRiesgoLaboral.FormattingEnabled = true;
-            cboRiesgoLaboral.Location = new Point(367, 163);
-            cboRiesgoLaboral.Name = "cboRiesgoLaboral";
-            cboRiesgoLaboral.Size = new Size(126, 24);
-            cboRiesgoLaboral.TabIndex = 111;
+            ckRiesgoLaboral.AutoSize = true;
+            ckRiesgoLaboral.ForeColor = SystemColors.ActiveCaptionText;
+            ckRiesgoLaboral.Location = new Point(261, 164);
+            ckRiesgoLaboral.Name = "ckRiesgoLaboral";
+            ckRiesgoLaboral.Size = new Size(103, 19);
+            ckRiesgoLaboral.TabIndex = 113;
+            ckRiesgoLaboral.Text = "Riesgo Laboral";
+            ckRiesgoLaboral.UseVisualStyleBackColor = true;
             // 
             // RegistroNominaForm
             // 
@@ -546,6 +526,7 @@
             Controls.Add(panel1);
             Name = "RegistroNominaForm";
             Text = "RegistroNominaForm";
+            Load += RegistroNominaForm_Load;
             panel1.ResumeLayout(false);
             panel2.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
@@ -598,10 +579,8 @@
         private Label label6;
         private Label label11;
         private TextBox txtAnticipos;
-        private Label label13;
-        private Label label12;
         private TextBox txtPrestamos;
-        private ComboBox cboRiesgoLaboral;
-        private ComboBox cboNocturnidad;
+        private CheckBox ckRiesgoLaboral;
+        private CheckBox ckNocturnidad;
     }
 }

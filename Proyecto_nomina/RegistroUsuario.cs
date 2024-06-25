@@ -54,8 +54,7 @@ namespace Proyecto_nomina
             return new UserDto
             {
                 Name = txtNombre.Text.Trim(),
-                Email = txtEmail.Text.Trim(),
-                Password = txtContraseña.Text.Trim()
+                Email = txtEmail.Text.Trim()
             };
         }
 
@@ -144,7 +143,7 @@ namespace Proyecto_nomina
 
         private void dgvRegistroUsuario_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex > 0)
+            if (e.RowIndex >= 0)
             {
                 var selectedUsuario = (UserDto)dgvRegistroUsuario.SelectedRows[0].DataBoundItem;
                 SetValues(selectedUsuario);
@@ -154,7 +153,6 @@ namespace Proyecto_nomina
         private void SetValues(UserDto dto)
         {
             txtNombre.Text = dto.Name;
-            txtContraseña.Text = dto.Password;
             txtEmail.Text = dto.Email;
         }
 

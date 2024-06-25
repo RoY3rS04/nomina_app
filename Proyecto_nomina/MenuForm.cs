@@ -1,4 +1,6 @@
-﻿using SharedModels;
+﻿using AutoMapper;
+using SharedModels;
+using SharedModels.DTOs.Nomina;
 using SharedModels.DTOs.User;
 using System;
 using System.Collections.Generic;
@@ -96,6 +98,7 @@ namespace Proyecto_nomina
 
         private void btnRegistroEmpleadoForm_Click(object sender, EventArgs e)
         {
+
             RegistroEmpleadoForm frm = new RegistroEmpleadoForm(_apiClient);
             AbrirFormEnPanel(frm);
         }
@@ -114,6 +117,7 @@ namespace Proyecto_nomina
 
         private void btnRegistroNominaForm_Click(object sender, EventArgs e)
         {
+
             RegistroNominaForm frm = new RegistroNominaForm(_apiClient);
             AbrirFormEnPanel2(frm);
         }

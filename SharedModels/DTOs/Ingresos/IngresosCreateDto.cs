@@ -17,7 +17,7 @@ namespace SharedModels.DTOs.Ingresos
         public int? DiasExtras { get; set; }
         public int? HorasExtras { get; set; }
 
-        public double? RiesgoLaboral { get; set; }
+        public bool? RiesgoLaboral { get; set; }
 
         public bool? Nocturnidad { get; set; }
 

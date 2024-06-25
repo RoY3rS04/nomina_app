@@ -183,7 +183,7 @@ namespace Proyecto_nomina
 
         private void dgvRegistroEmpleado_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex > 0)
+            if (e.RowIndex >= 0)
             {
                 var selectedEmpleado = (EmpleadoDto)dgvRegistroEmpleado.SelectedRows[0].DataBoundItem;
                 SetValues(selectedEmpleado);

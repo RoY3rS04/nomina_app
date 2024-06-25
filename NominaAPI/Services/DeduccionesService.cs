@@ -95,11 +95,11 @@ namespace NominaAPI.Services
 
         }
 
-        public async Task<Response<List<DeduccionesDto>>> GetById(int id)
+        public async Task<Response<DeduccionesDto>> GetById(int id)
         {
             if (id <= 0)
             {
-                return new Response<List<DeduccionesDto>>
+                return new Response<DeduccionesDto>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = "El ID debe ser un número positivo"
@@ -113,23 +113,23 @@ namespace NominaAPI.Services
 
                 if (deduccion == null)
                 {
-                    return new Response<List<DeduccionesDto>>
+                    return new Response<DeduccionesDto>
                     {
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = "No se encontró ninguna deducción con el ID especificado"
                     };
                 }
 
-                return new Response<List<DeduccionesDto>>
+                return new Response<DeduccionesDto>
                 {
-                    Data = _mapper.Map<List<DeduccionesDto>>(deduccion),
+                    Data = _mapper.Map<DeduccionesDto>(deduccion),
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Deducción obtenida correctamente"
                 };
             }
             catch (Exception e)
             {
-                return new Response<List<DeduccionesDto>>
+                return new Response<DeduccionesDto>
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Error al obtener la deducción especificada"

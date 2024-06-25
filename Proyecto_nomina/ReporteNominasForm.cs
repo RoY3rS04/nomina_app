@@ -1,4 +1,5 @@
 ﻿using NominaAPI.Http.Responses;
+using SharedModels;
 using SharedModels.DTOs.Empleado;
 using SharedModels.DTOs.Nomina;
 using System;
@@ -52,7 +53,7 @@ namespace Proyecto_nomina
             {
                 var response = await _apiClient.Nominas.GetAllAsync();
 
-                dgvReporteNominas.DataSource = response.Data;
+                dgvReporteNominas.DataSource = await MapNominas(response.Data);
 
             }
             catch (Exception ex)
@@ -102,7 +103,7 @@ namespace Proyecto_nomina
                     response = await _apiClient.Nominas.GetAllAsync(queryParams);
                 }
 
-                dgvReporteNominas.DataSource = response.Data;
+                dgvReporteNominas.DataSource = await MapNominas(response.Data);
             }
             catch (Exception ex)
             {
@@ -113,6 +114,50 @@ namespace Proyecto_nomina
                     MessageBoxIcon.Error
                 );
             }
+        }
+
+        private async Task<List<NominaInfo>> MapNominas(IEnumerable<NominaDto> nominas)
+        {
+            NominaCalculator calculator = new NominaCalculator();
+
+            List<NominaInfo> nominaInfos = new List<NominaInfo>();
+
+            foreach (var nomina in nominas)
+            {
+                var ingresos = (
+                    await _apiClient.Ingresos.GetByIdAsync(nomina.IngresosId)
+                ).Data;
+
+                var deducciones = (
+                    await _apiClient.Deducciones.GetByIdAsync(nomina.DeduccionesId)
+                ).Data;
+
+                var empleado = (
+                    await _apiClient.Empleados.GetByIdAsync(nomina.EmpleadoId)
+                ).Data;
+
+                var salarioBruto = calculator.GetSalarioBruto(ingresos);
+                var totalDeducciones = calculator.GetDeducciones(deducciones);
+
+                NominaInfo nominaInfo = new NominaInfo
+                {
+                    Id = nomina.Id,
+                    Cedula = empleado.Cedula,
+                    CodigoEmpleado = empleado.CodigoEmpleado,
+                    PrimerNombre = empleado.PrimerNombre,
+                    PrimerApellido = empleado.PrimerApellido,
+                    NumeroINSS = empleado.NumeroINSS,
+                    NumeroRUC = empleado.NumeroRUC,
+                    SalarioBruto = salarioBruto,
+                    TotalDeducciones = totalDeducciones,
+                    SalarioNeto = salarioBruto - totalDeducciones,
+                    FechaRealizacion = nomina.FechaRealizacion
+                };
+
+                nominaInfos.Add(nominaInfo);
+            }
+
+            return nominaInfos;
         }
     }
 }
