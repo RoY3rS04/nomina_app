@@ -28,6 +28,7 @@ builder.Services.AddScoped<Repository<Ingresos>>();
 builder.Services.AddScoped<Repository<Empleado>>();
 builder.Services.AddScoped<Repository<Deducciones>>();
 builder.Services.AddScoped<Repository<Nomina>>();
+builder.Services.AddScoped<NominaRepository>();
 
 builder.Services.AddAuthentication(options =>
 {

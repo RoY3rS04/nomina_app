@@ -1,4 +1,7 @@
-﻿using System;
+﻿using SharedModels.DTOs.Deducciones;
+using SharedModels.DTOs.Empleado;
+using SharedModels.DTOs.Ingresos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +12,9 @@ namespace SharedModels.DTOs.Nomina
     public class NominaDto
     {
         public int Id { get; set; }
-        public int EmpleadoId { get; set; }
-        public int IngresosId { get; set; }
-        public int DeduccionesId { get; set; }
+        public EmpleadoDto Empleado { get; set; }
+        public IngresosDto Ingresos { get; set; }
+        public DeduccionesDto Deducciones { get; set; }
         public DateTime FechaRealizacion { get; set; }
     }
 }

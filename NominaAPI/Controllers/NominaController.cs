@@ -11,14 +11,14 @@ using SharedModels.DTOs.Nomina;
 
 namespace NominaAPI.Controllers
 {
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/[controller]")]
     [ApiController]
     public class NominaController : ControllerBase
     {
         private readonly NominaService _nominaService;
 
-        public NominaController(Repository<Nomina> nominaRepository, IMapper mapper)
+        public NominaController(NominaRepository nominaRepository, IMapper mapper)
         {
             _nominaService = new NominaService(nominaRepository, mapper);
         }

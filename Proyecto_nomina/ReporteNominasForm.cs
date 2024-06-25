@@ -124,7 +124,8 @@ namespace Proyecto_nomina
 
             foreach (var nomina in nominas)
             {
-                var ingresos = (
+
+                /*var ingresos = (
                     await _apiClient.Ingresos.GetByIdAsync(nomina.IngresosId)
                 ).Data;
 
@@ -134,20 +135,20 @@ namespace Proyecto_nomina
 
                 var empleado = (
                     await _apiClient.Empleados.GetByIdAsync(nomina.EmpleadoId)
-                ).Data;
+                ).Data;*/
 
-                var salarioBruto = calculator.GetSalarioBruto(ingresos);
-                var totalDeducciones = calculator.GetDeducciones(deducciones);
+                var salarioBruto = calculator.GetSalarioBruto(nomina.Ingresos);
+                var totalDeducciones = calculator.GetDeducciones(nomina.Deducciones);
 
                 NominaInfo nominaInfo = new NominaInfo
                 {
                     Id = nomina.Id,
-                    Cedula = empleado.Cedula,
-                    CodigoEmpleado = empleado.CodigoEmpleado,
-                    PrimerNombre = empleado.PrimerNombre,
-                    PrimerApellido = empleado.PrimerApellido,
-                    NumeroINSS = empleado.NumeroINSS,
-                    NumeroRUC = empleado.NumeroRUC,
+                    Cedula = nomina.Empleado.Cedula,
+                    CodigoEmpleado = nomina.Empleado.CodigoEmpleado,
+                    PrimerNombre = nomina.Empleado.PrimerNombre,
+                    PrimerApellido = nomina.Empleado.PrimerApellido,
+                    NumeroINSS = nomina.Empleado.NumeroINSS,
+                    NumeroRUC = nomina.Empleado.NumeroRUC,
                     SalarioBruto = salarioBruto,
                     TotalDeducciones = totalDeducciones,
                     SalarioNeto = salarioBruto - totalDeducciones,

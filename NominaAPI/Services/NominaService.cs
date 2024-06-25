@@ -11,11 +11,11 @@ namespace NominaAPI.Services
 {
     public class NominaService
     {
-        private readonly Repository<Nomina> _nominaRepository;
+        private readonly NominaRepository _nominaRepository;
         private readonly IMapper _mapper;
 
         public NominaService(
-            Repository<Nomina> nominaRepository,
+            NominaRepository nominaRepository,
             IMapper mapper
         )
         {
@@ -34,7 +34,7 @@ namespace NominaAPI.Services
                     DateTime realDate = DateTime.Parse(fechaRealizacion);
 
                     nominas = await _nominaRepository
-                        .GetAllAsync(i => i.EmpleadoId == empleadoId && (i.FechaRealizacion.Year == realDate.Year &&
+                        .GetPopulatedNominas(i => i.EmpleadoId == empleadoId && (i.FechaRealizacion.Year == realDate.Year &&
                         i.FechaRealizacion.Month == realDate.Month));
                 }
                 else if (empleadoId != null)
@@ -49,18 +49,18 @@ namespace NominaAPI.Services
                     }
 
                     nominas = await _nominaRepository
-                        .GetAllAsync(i => i.EmpleadoId == empleadoId);
+                        .GetPopulatedNominas(i => i.EmpleadoId == empleadoId);
                 }
                 else if (fechaRealizacion != null)
                 {
                     DateTime realDate = DateTime.Parse(fechaRealizacion);
 
                     nominas = await _nominaRepository
-                        .GetAllAsync(i => i.FechaRealizacion.Year == realDate.Year && i.FechaRealizacion.Month == realDate.Month);
+                        .GetPopulatedNominas(i => i.FechaRealizacion.Year == realDate.Year && i.FechaRealizacion.Month == realDate.Month);
                 }
                 else
                 {
-                    nominas = await _nominaRepository.GetAllAsync();
+                    nominas = await _nominaRepository.GetPopulatedNominas();
                 }
 
                 return new Response<List<NominaDto>>

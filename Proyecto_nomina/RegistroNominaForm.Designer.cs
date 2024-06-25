@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panel1 = new Panel();
             btnNuevo = new Button();
             btnEliminar = new Button();
@@ -41,6 +42,8 @@
             txtAnticipos = new TextBox();
             label10 = new Label();
             groupBox2 = new GroupBox();
+            ckRiesgoLaboral = new CheckBox();
+            ckNocturnidad = new CheckBox();
             txtBonos = new TextBox();
             txtComisiones = new TextBox();
             label5 = new Label();
@@ -64,8 +67,6 @@
             rdbMasculino = new RadioButton();
             dtpFechaNacimiento = new DateTimePicker();
             cboEstadoCivil = new ComboBox();
-            ckNocturnidad = new CheckBox();
-            ckRiesgoLaboral = new CheckBox();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -270,6 +271,28 @@
             groupBox2.Text = "Ingresos";
             groupBox2.Enter += groupBox2_Enter;
             // 
+            // ckRiesgoLaboral
+            // 
+            ckRiesgoLaboral.AutoSize = true;
+            ckRiesgoLaboral.ForeColor = SystemColors.ActiveCaptionText;
+            ckRiesgoLaboral.Location = new Point(261, 164);
+            ckRiesgoLaboral.Name = "ckRiesgoLaboral";
+            ckRiesgoLaboral.Size = new Size(103, 19);
+            ckRiesgoLaboral.TabIndex = 113;
+            ckRiesgoLaboral.Text = "Riesgo Laboral";
+            ckRiesgoLaboral.UseVisualStyleBackColor = true;
+            // 
+            // ckNocturnidad
+            // 
+            ckNocturnidad.AutoSize = true;
+            ckNocturnidad.ForeColor = SystemColors.ActiveCaptionText;
+            ckNocturnidad.Location = new Point(16, 164);
+            ckNocturnidad.Name = "ckNocturnidad";
+            ckNocturnidad.Size = new Size(93, 19);
+            ckNocturnidad.TabIndex = 112;
+            ckNocturnidad.Text = "Nocturnidad";
+            ckNocturnidad.UseVisualStyleBackColor = true;
+            // 
             // txtBonos
             // 
             txtBonos.Font = new Font("Microsoft Sans Serif", 9.75F);
@@ -427,11 +450,20 @@
             // dgvRegistroNomina
             // 
             dgvRegistroNomina.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Window;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
+            dgvRegistroNomina.DefaultCellStyle = dataGridViewCellStyle1;
             dgvRegistroNomina.Location = new Point(8, 297);
             dgvRegistroNomina.Name = "dgvRegistroNomina";
             dgvRegistroNomina.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvRegistroNomina.Size = new Size(738, 188);
             dgvRegistroNomina.TabIndex = 113;
+            dgvRegistroNomina.CellClick += dgvRegistroNomina_CellClick;
             // 
             // cboEstado
             // 
@@ -494,28 +526,6 @@
             cboEstadoCivil.Name = "cboEstadoCivil";
             cboEstadoCivil.Size = new Size(100, 23);
             cboEstadoCivil.TabIndex = 106;
-            // 
-            // ckNocturnidad
-            // 
-            ckNocturnidad.AutoSize = true;
-            ckNocturnidad.ForeColor = SystemColors.ActiveCaptionText;
-            ckNocturnidad.Location = new Point(16, 164);
-            ckNocturnidad.Name = "ckNocturnidad";
-            ckNocturnidad.Size = new Size(93, 19);
-            ckNocturnidad.TabIndex = 112;
-            ckNocturnidad.Text = "Nocturnidad";
-            ckNocturnidad.UseVisualStyleBackColor = true;
-            // 
-            // ckRiesgoLaboral
-            // 
-            ckRiesgoLaboral.AutoSize = true;
-            ckRiesgoLaboral.ForeColor = SystemColors.ActiveCaptionText;
-            ckRiesgoLaboral.Location = new Point(261, 164);
-            ckRiesgoLaboral.Name = "ckRiesgoLaboral";
-            ckRiesgoLaboral.Size = new Size(103, 19);
-            ckRiesgoLaboral.TabIndex = 113;
-            ckRiesgoLaboral.Text = "Riesgo Laboral";
-            ckRiesgoLaboral.UseVisualStyleBackColor = true;
             // 
             // RegistroNominaForm
             // 
