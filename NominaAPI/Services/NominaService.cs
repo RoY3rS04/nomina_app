@@ -12,14 +12,20 @@ namespace NominaAPI.Services
     public class NominaService
     {
         private readonly NominaRepository _nominaRepository;
+        private readonly Repository<Ingresos> _ingresosRepository;
+        private readonly Repository<Deducciones> _deduccionesRepository;
         private readonly IMapper _mapper;
 
         public NominaService(
             NominaRepository nominaRepository,
+            Repository<Ingresos> ingresosRepository,
+            Repository<Deducciones> deduccionesRepository,
             IMapper mapper
         )
         {
             _nominaRepository = nominaRepository;
+            _ingresosRepository = ingresosRepository;
+            _deduccionesRepository = deduccionesRepository;
             _mapper = mapper;
         }
 
@@ -291,14 +297,18 @@ namespace NominaAPI.Services
                     };
                 }
 
-                var relatedNominas = await _nominaRepository.GetAllAsync(n => n.EmpleadoId == nomina.EmpleadoId);
+                await _nominaRepository.DeleteAsync(nomina);
 
-                await _nominaRepository.DeleteRangeAsync(relatedNominas);
+                var relatedIngresos = await _ingresosRepository.GetById(nomina.IngresosId);
+                var relatedDeducciones = await _deduccionesRepository.GetById(nomina.DeduccionesId);
+
+                await _ingresosRepository.DeleteAsync(relatedIngresos);
+                await _deduccionesRepository.DeleteAsync(relatedDeducciones);
 
                 return new Response<NominaDto>
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Nómina y sus relacionadas eliminadas correctamente"
+                    Message = "Nómina eliminada correctamente"
                 };
             }
             catch (Exception)

@@ -20,10 +20,17 @@ namespace NominaAPI.Controllers
 
         public NominaController(
             NominaRepository nominaRepository,
+            Repository<Ingresos> ingresosRepository,
+            Repository<Deducciones> deduccionesRepository,
             IMapper mapper
         )
         {
-            _nominaService = new NominaService(nominaRepository, mapper);
+            _nominaService = new NominaService(
+                nominaRepository,
+                ingresosRepository,
+                deduccionesRepository,
+                mapper
+            );
         }
 
         [HttpGet]

@@ -81,12 +81,12 @@ namespace Proyecto_nomina
             }
         }
 
-        private (IngresosUpdateDto, DeduccionesUpdateDto) GetValues()
+        private (IngresosDto, DeduccionesDto) GetValues()
         {
 
             return (
 
-                new IngresosUpdateDto
+                new IngresosDto
                 {
                     Bonos = Convert.ToDouble(txtBonos.Text.Trim()),
                     Id = _ingresosId,
@@ -101,7 +101,7 @@ namespace Proyecto_nomina
                     Viatico = Convert.ToDouble(txtViaticos.Text.Trim()),
                     FechaCierre = DateTime.Now
                 },
-                new DeduccionesUpdateDto
+                new DeduccionesDto
                 {
                     Anticipos = Convert.ToDouble(txtAnticipos.Text.Trim()),
                     Id = _deduccionesId,
@@ -214,7 +214,7 @@ namespace Proyecto_nomina
                 EmpleadoId = (int)cboCodigoEmpleado.SelectedValue
             };
 
-            if(updateIngresosDto == null || updateDeduccionesDto == null)
+            if (updateIngresosDto == null || updateDeduccionesDto == null)
             {
                 MessageBox.Show(
                     "Por favor ingrese toda la informacion",
@@ -235,7 +235,7 @@ namespace Proyecto_nomina
                     _apiClient.Deducciones.UpdateAsync(_deduccionesId, updateDeduccionesDto)
                 );
 
-                if(results.Any(r => r == false))
+                if (results.Any(r => r == false))
                 {
                     MessageBox.Show(
                         $"Ocurrio un error al actualizar la nomina, ingresos o deducciones",
@@ -256,10 +256,103 @@ namespace Proyecto_nomina
 
                 await LoadNominasAsync();
 
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(
                     $"Ocurrio un error al actualizar la nomina, ingresos o deducciones {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
+        private async void btnNuevo_Click(object sender, EventArgs e)
+        {
+            var (createIngresosDto, createDeduccionesDto) = GetValues();
+
+            try
+            {
+
+                var createIngresosResponse = await _apiClient.Ingresos.CreateAsync(createIngresosDto);
+                var createDeduccionesResponse = await _apiClient.Deducciones.CreateAsync(createDeduccionesDto);
+
+                var createNominaResponse = await _apiClient.Nominas.CreateAsync(
+                    new NominaCreateDto
+                    {
+                        IngresosId = createIngresosResponse.Data.Id,
+                        DeduccionesId = createDeduccionesResponse.Data.Id,
+                        EmpleadoId = (int)cboCodigoEmpleado.SelectedValue,
+                        FechaRealizacion = DateTime.Now
+                    }
+                );
+
+                MessageBox.Show(
+                    "Nomina creada correctamente",
+                    "Exito",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+
+                await LoadNominasAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Ocurrio un error al crear la nomina, ingresos o deducciones {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
+        private async void btnEliminar_Click(object sender, EventArgs e)
+        {
+
+            if(_nominaId <= 0)
+            {
+                MessageBox.Show(
+                    "Seleccione una nomina para eliminar",
+                    "Advertencia",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+
+                return;
+            }
+
+            try
+            {
+
+                var response = await _apiClient.Nominas.GetByIdAsync(_nominaId);
+
+                var result = MessageBox.Show(
+                    $"Esta seguro que quiere eliminar la nomina del empleado {cboCodigoEmpleado.SelectedText} y fecha de realizacion: {response.Data.FechaRealizacion}",
+                    "Confirmacion",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if(result == DialogResult.Yes)
+                {
+                    await _apiClient.Nominas.DeleteAsync(_nominaId);
+
+                    MessageBox.Show(
+                        "Nomina eliminada correctamente",
+                        "Exito",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+
+                    await LoadNominasAsync();
+                }
+
+            } catch(Exception ex)
+            {
+                MessageBox.Show(
+                    $"Ocurrio un error al eliminar la nomina, ingresos o deducciones {ex.Message}",
                     "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
