@@ -18,7 +18,10 @@ namespace NominaAPI.Controllers
     {
         private readonly NominaService _nominaService;
 
-        public NominaController(NominaRepository nominaRepository, IMapper mapper)
+        public NominaController(
+            NominaRepository nominaRepository,
+            IMapper mapper
+        )
         {
             _nominaService = new NominaService(nominaRepository, mapper);
         }
@@ -56,12 +59,12 @@ namespace NominaAPI.Controllers
             return response.SendResponse(this);
         }
 
-        [HttpPatch("{id}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<Response<NominaDto>>> Update(int id, JsonPatchDocument<NominaUpdateDto> updateDto)
+        public async Task<ActionResult<Response<NominaDto>>> Update(int id, NominaUpdateDto updateDto)
         {
             var response = await _nominaService.Update(id, updateDto, this);
 

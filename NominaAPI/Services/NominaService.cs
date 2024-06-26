@@ -102,7 +102,7 @@ namespace NominaAPI.Services
 
             try
             {
-                var nomina = await _nominaRepository.GetById(id);
+                var nomina = await _nominaRepository.GetByIdPopulated(id);
 
                 if (nomina == null)
                 {
@@ -177,7 +177,7 @@ namespace NominaAPI.Services
 
         public async Task<Response<NominaDto>> Update(
             int id,
-            JsonPatchDocument<NominaUpdateDto> updatePatch,
+            NominaUpdateDto updateDto,
             ControllerBase controller
             )
         {
@@ -192,7 +192,7 @@ namespace NominaAPI.Services
 
             try
             {
-                var nomina = await _nominaRepository.GetById(id);
+                var nomina = await _nominaRepository.GetByIdPopulated(id);
 
                 if (nomina == null)
                 {
@@ -203,9 +203,7 @@ namespace NominaAPI.Services
                     };
                 }
 
-                var nominaDto = _mapper.Map<NominaUpdateDto>(nomina);
-
-                updatePatch.ApplyTo(nominaDto, controller.ModelState);
+                _mapper.Map(updateDto, nomina);
 
                 if (!controller.ModelState.IsValid)
                 {
@@ -215,8 +213,6 @@ namespace NominaAPI.Services
                         Message = "Modelo de nómina inválido"
                     };
                 }
-
-                _mapper.Map(nominaDto, nomina);
 
                 using (var transaction = await _nominaRepository.BeginTransactionAsync())
                 {

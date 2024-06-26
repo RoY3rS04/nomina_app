@@ -31,5 +31,14 @@ namespace NominaAPI.Repository
                 .Include(n => n.Empleado)
                 .ToListAsync();
         }
+
+        public async Task<Nomina> GetByIdPopulated(int id)
+        {
+            return _nominas.Where(n => n.Id == id)
+                .Include(n => n.Ingresos)
+                .Include(n => n.Deducciones)
+                .Include(n => n.Empleado)
+                .FirstOrDefault();
+        }
     }
 }

@@ -125,18 +125,6 @@ namespace Proyecto_nomina
             foreach (var nomina in nominas)
             {
 
-                /*var ingresos = (
-                    await _apiClient.Ingresos.GetByIdAsync(nomina.IngresosId)
-                ).Data;
-
-                var deducciones = (
-                    await _apiClient.Deducciones.GetByIdAsync(nomina.DeduccionesId)
-                ).Data;
-
-                var empleado = (
-                    await _apiClient.Empleados.GetByIdAsync(nomina.EmpleadoId)
-                ).Data;*/
-
                 var salarioBruto = calculator.GetSalarioBruto(nomina.Ingresos);
                 var totalDeducciones = calculator.GetDeducciones(nomina.Deducciones);
 

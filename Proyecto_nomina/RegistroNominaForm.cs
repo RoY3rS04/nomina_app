@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using NominaAPI.Http.Responses;
 using SharedModels;
+using SharedModels.DTOs.Deducciones;
 using SharedModels.DTOs.Empleado;
+using SharedModels.DTOs.Ingresos;
 using SharedModels.DTOs.Nomina;
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,9 @@ namespace Proyecto_nomina
     {
         private readonly ApiClient _apiClient;
         private List<NominaDto> _nominas;
+        private int _ingresosId;
+        private int _deduccionesId;
+        private int _nominaId;
 
         public RegistroNominaForm(ApiClient apiClient)
         {
@@ -76,6 +81,39 @@ namespace Proyecto_nomina
             }
         }
 
+        private (IngresosUpdateDto, DeduccionesUpdateDto) GetValues()
+        {
+
+            return (
+
+                new IngresosUpdateDto
+                {
+                    Bonos = Convert.ToDouble(txtBonos.Text.Trim()),
+                    Id = _ingresosId,
+                    Comision = Convert.ToDouble(txtComisiones.Text.Trim()),
+                    Depreciacion = Convert.ToDouble(txtDepreciacion.Text.Trim()),
+                    DiasExtras = Convert.ToInt32(txtDiasExtras.Text.Trim()),
+                    EmpleadoId = (int)cboCodigoEmpleado.SelectedValue,
+                    HorasExtras = Convert.ToInt32(txtHorasExtras.Text.Trim()),
+                    Nocturnidad = ckNocturnidad.Checked,
+                    RiesgoLaboral = ckRiesgoLaboral.Checked,
+                    SalarioOrdinario = Convert.ToDouble(txtSalarioOrdinario.Text.Trim()),
+                    Viatico = Convert.ToDouble(txtViaticos.Text.Trim()),
+                    FechaCierre = DateTime.Now
+                },
+                new DeduccionesUpdateDto
+                {
+                    Anticipos = Convert.ToDouble(txtAnticipos.Text.Trim()),
+                    Id = _deduccionesId,
+                    EmpleadoId = (int)cboCodigoEmpleado.SelectedValue,
+                    Prestamos = Convert.ToDouble(txtPrestamos.Text.Trim()),
+                    FechaCierre = DateTime.Now
+                }
+
+            );
+
+        }
+
         private void SetValues(NominaDto dto)
         {
             txtAnticipos.Text = $"{dto.Deducciones.Anticipos}";
@@ -90,13 +128,17 @@ namespace Proyecto_nomina
             ckNocturnidad.Checked = dto.Ingresos.Nocturnidad;
             ckRiesgoLaboral.Checked = dto.Ingresos.RiesgoLaboral;
 
+            _nominaId = dto.Id;
+            _ingresosId = dto.Ingresos.Id;
+            _deduccionesId = dto.Deducciones.Id;
+
             int index = 0;
 
-            for(int i = 0; i< cboCodigoEmpleado.Items.Count; i++)
+            for (int i = 0; i < cboCodigoEmpleado.Items.Count; i++)
             {
                 string value = cboCodigoEmpleado.GetItemText(cboCodigoEmpleado.Items[i]);
 
-                if(value == $"{dto.Empleado.PrimerNombre + " " + dto.Empleado.PrimerApellido}")
+                if (value == $"{dto.Empleado.PrimerNombre + " " + dto.Empleado.PrimerApellido}")
                 {
                     index = i;
                 }
@@ -122,18 +164,6 @@ namespace Proyecto_nomina
 
             foreach (var nomina in nominas)
             {
-
-                /*var ingresos = (
-                    await _apiClient.Ingresos.GetByIdAsync(nomina.IngresosId)
-                ).Data;
-
-                var deducciones = (
-                    await _apiClient.Deducciones.GetByIdAsync(nomina.DeduccionesId)
-                ).Data;
-
-                var empleado = (
-                    await _apiClient.Empleados.GetByIdAsync(nomina.EmpleadoId)
-                ).Data;*/
 
                 var salarioBruto = calculator.GetSalarioBruto(nomina.Ingresos);
                 var totalDeducciones = calculator.GetDeducciones(nomina.Deducciones);
@@ -168,6 +198,72 @@ namespace Proyecto_nomina
                 var nomina = _nominas.Where(n => n.Id == selectedNominaId).FirstOrDefault();
 
                 SetValues(nomina);
+            }
+        }
+
+        private async void btnActualizar_Click(object sender, EventArgs e)
+        {
+            var (updateIngresosDto, updateDeduccionesDto) = GetValues();
+
+            NominaUpdateDto updateNominaDto = new NominaUpdateDto
+            {
+                DeduccionesId = _deduccionesId,
+                IngresosId = _ingresosId,
+                Id = _nominaId,
+                FechaRealizacion = DateTime.Now,
+                EmpleadoId = (int)cboCodigoEmpleado.SelectedValue
+            };
+
+            if(updateIngresosDto == null || updateDeduccionesDto == null)
+            {
+                MessageBox.Show(
+                    "Por favor ingrese toda la informacion",
+                    "Advertencia",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+
+                return;
+            }
+
+            try
+            {
+
+                var results = await Task.WhenAll(
+                    _apiClient.Nominas.UpdateAsync(_nominaId, updateNominaDto),
+                    _apiClient.Ingresos.UpdateAsync(_ingresosId, updateIngresosDto),
+                    _apiClient.Deducciones.UpdateAsync(_deduccionesId, updateDeduccionesDto)
+                );
+
+                if(results.Any(r => r == false))
+                {
+                    MessageBox.Show(
+                        $"Ocurrio un error al actualizar la nomina, ingresos o deducciones",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+
+                    return;
+                }
+
+                MessageBox.Show(
+                    "Nomina actualizada correctamente",
+                    "Exito",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+
+                await LoadNominasAsync();
+
+            } catch(Exception ex)
+            {
+                MessageBox.Show(
+                    $"Ocurrio un error al actualizar la nomina, ingresos o deducciones {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
         }
     }
