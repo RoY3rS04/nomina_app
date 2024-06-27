@@ -11,7 +11,7 @@ using SharedModels.DTOs.Nomina;
 
 namespace NominaAPI.Controllers
 {
-    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/[controller]")]
     [ApiController]
     public class NominaController : ControllerBase

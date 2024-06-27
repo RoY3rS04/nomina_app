@@ -28,10 +28,10 @@ namespace NominaAPI.Services
         )
         {
             _empleadoRepository = empleadoRepository;
-            _mapper = mapper;
             _ingresosRepository = ingresosRepository;
             _deduccionesRepository = deduccionesRepository;
-            _nominaRepository = nominaRepository;
+            _nominaRepository = nominaRepository; 
+            _mapper = mapper;
         }
 
         public async Task<Response<List<EmpleadoDto>>> GetAll(string? codigoEmp, string? cedulaEmp)

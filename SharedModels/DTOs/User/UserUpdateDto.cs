@@ -11,9 +11,9 @@ namespace SharedModels.DTOs.User
         [StringLength(50)]
         public string? Email { get; set; }
 
-        [StringLength(50)]
+        //[StringLength(50)]
         //[Required]
-        public string? ActualPassword { get; set; }
+        //public string? ActualPassword { get; set; }
 
         [StringLength(50)]
         public string? NewPassword { get; set; }

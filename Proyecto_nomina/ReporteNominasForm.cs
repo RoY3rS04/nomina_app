@@ -55,7 +55,7 @@ namespace Proyecto_nomina
                 var response = await _apiClient.Nominas.GetAllAsync();
 
                 dgvReporteNominas.DataSource = await MapNominas(response.Data);
-
+                
             }
             catch (Exception ex)
             {

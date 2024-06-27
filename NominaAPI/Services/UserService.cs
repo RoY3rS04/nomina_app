@@ -10,6 +10,7 @@ namespace NominaAPI.Services
     using BCrypt.Net;
     using Microsoft.AspNetCore.JsonPatch;
     using Microsoft.EntityFrameworkCore;
+    using SharedModels.DTOs.Empleado;
 
     public class UserService
     {
@@ -45,8 +46,8 @@ namespace NominaAPI.Services
                         Message = "There's already a user with that email"
                     };
                 }
-
-                if(!controller.ModelState.IsValid)
+               
+                if (!controller.ModelState.IsValid)
                 {
                     return new Response<UserDto>
                     {
@@ -143,9 +144,9 @@ namespace NominaAPI.Services
 
         public async Task<Response<UserDto>> Update(
             int id,
-            UserUpdateDto updateDto,
-            ControllerBase controller
-        ) {
+            UserUpdateDto updateDto
+        ) 
+        {
             if (id <= 0)
             {
                 return new Response<UserDto>
@@ -168,34 +169,13 @@ namespace NominaAPI.Services
                     };
                 }
 
-                if(!controller.ModelState.IsValid)
+                user.Name = updateDto.Name;
+                user.Email = updateDto.Email;
+                user.IsAdmin = updateDto.IsAdmin.Value;
+                if (!string.IsNullOrEmpty(updateDto.NewPassword))
                 {
-                    return new Response<UserDto>
-                    {
-                        StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Invalid user model"
-                    };
+                    user.Password = BCrypt.HashPassword(updateDto.NewPassword);
                 }
-
-                //TODO
-                // - ADD AUTHENTICATION REQUIREMENTS
-
-                /*if(!BCrypt.Verify(updateDto.ActualPassword, user.Password))
-                {
-                    return new Response<UserDto>
-                    {
-                        StatusCode = StatusCodes.Status401Unauthorized,
-                        Message = "Invalid password"
-                    };
-                }*/
-
-                updateDto = new UserUpdateDto
-                {
-                    Name = updateDto.Name ?? user.Name,
-                    Email = updateDto.Email ?? user.Email,
-                    IsAdmin = updateDto.IsAdmin ?? user.IsAdmin
-                };
-                
                 _mapper.Map(updateDto,user);
 
                 using(var transaction = await _userRepository.BeginTransactionAsync())
@@ -235,7 +215,7 @@ namespace NominaAPI.Services
                         return new Response<UserDto>
                         {
                             StatusCode = StatusCodes.Status500InternalServerError,
-                            Message = "Something went wrong when updating the user"
+                            Message = "Something went wrong when updating the user" + e.Message
                         };
                     }
                 }

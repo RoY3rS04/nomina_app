@@ -67,7 +67,7 @@ namespace NominaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Response<UserDto>>> UpdateUser(int id, UserUpdateDto updateDto)
         {
-            var response = await _userService.Update(id, updateDto, this);
+            var response = await _userService.Update(id, updateDto);
 
             return response.SendResponse(this);
         }

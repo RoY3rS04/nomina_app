@@ -43,6 +43,7 @@
             btnEliminar = new Button();
             btnActualizar = new Button();
             btnGuardar = new Button();
+            ckAdmin = new CheckBox();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvRegistroUsuario).BeginInit();
             panel1.SuspendLayout();
@@ -52,6 +53,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(ckAdmin);
             groupBox1.Controls.Add(dgvRegistroUsuario);
             groupBox1.Controls.Add(txtContraseña);
             groupBox1.Controls.Add(txtEmail);
@@ -62,7 +64,7 @@
             groupBox1.ForeColor = SystemColors.ControlText;
             groupBox1.Location = new Point(101, 11);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(738, 216);
+            groupBox1.Size = new Size(738, 228);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Usuario";
@@ -247,6 +249,16 @@
             btnGuardar.UseVisualStyleBackColor = true;
             btnGuardar.Click += btnGuardar_Click;
             // 
+            // ckAdmin
+            // 
+            ckAdmin.AutoSize = true;
+            ckAdmin.Location = new Point(19, 192);
+            ckAdmin.Name = "ckAdmin";
+            ckAdmin.Size = new Size(98, 19);
+            ckAdmin.TabIndex = 10;
+            ckAdmin.Text = "Administador";
+            ckAdmin.UseVisualStyleBackColor = true;
+            // 
             // RegistroUsuario
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -285,5 +297,6 @@
         private Button btnEliminar;
         private Button btnActualizar;
         private Button btnGuardar;
+        private CheckBox ckAdmin;
     }
 }

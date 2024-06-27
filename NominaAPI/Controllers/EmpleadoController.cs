@@ -18,7 +18,7 @@ namespace NominaAPI.Controllers
     {
 
         private readonly EmpleadoService _empleadoService;
-
+        
         public EmpleadoController(
             Repository<Empleado> empleadoRepository,
             Repository<Ingresos> ingresosRepository,

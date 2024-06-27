@@ -127,7 +127,7 @@ namespace Proyecto_nomina
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                MessageBox.Show($"Error al actualizar el recurso: {ex.Message}");
                 throw new Exception("Error al procesar la solicitud de actualización.", ex);
             }
         }

@@ -1,4 +1,6 @@
-﻿using SharedModels;
+﻿using Microsoft.AspNetCore.Http;
+using NominaAPI.Services;
+using SharedModels;
 using SharedModels.DTOs.Empleado;
 using SharedModels.DTOs.User;
 using System;
@@ -35,7 +37,7 @@ namespace Proyecto_nomina
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
-                ClearInpunts();
+                ClearInputs();
                 await LoadUsersAsync();
             }
             catch (Exception ex)
@@ -51,11 +53,12 @@ namespace Proyecto_nomina
 
         private UserDto GetValues()
         {
-            return new UserDto
+            return new UserDto 
             {
                 Name = txtNombre.Text.Trim(),
-                Email = txtEmail.Text.Trim()
-            };
+                Email = txtEmail.Text.Trim(),
+                Password = txtContraseña.Text.Trim(),
+                IsAdmin = ckAdmin.Checked            };
         }
 
         private async Task LoadUsersAsync()
@@ -76,7 +79,7 @@ namespace Proyecto_nomina
             }
         }
 
-        private void ClearInpunts()
+        private void ClearInputs()
         {
             foreach (Control control in this.Controls)
             {
@@ -84,6 +87,7 @@ namespace Proyecto_nomina
                 {
                     control.Text = "";
                 }
+                ckAdmin.Checked = false;   
             }
         }
 
@@ -97,49 +101,42 @@ namespace Proyecto_nomina
             if (dgvRegistroUsuario.SelectedRows.Count > 0)
             {
                 var selectedUser = (UserDto)dgvRegistroUsuario.SelectedRows[0].DataBoundItem;
-                var updateUser = GetValues();
-                updateUser.Id = selectedUser.Id;
+
+                var updateUserDto = new UserUpdateDto
+                {
+                    Name = txtNombre.Text,
+                    Email = txtEmail.Text,
+                    IsAdmin = ckAdmin.Checked,
+                    NewPassword = txtContraseña.Text  
+                };
+
                 try
                 {
-                    var response = await _apiClient.Users.UpdateAsync(selectedUser.Id, updateUser);
-                    if (!response)
-                    {
-                        MessageBox.Show(
-                            "Ocurrió un error al actualizar el usuario",
-                            "Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-                        return;
-                    }
-                    MessageBox.Show(
-                        "Usuario actualizado correctamente",
-                        "Exito",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    var response = await _apiClient.Users.UpdateAsync(selectedUser.Id, updateUserDto);
 
-                    ClearInpunts();
-                    await LoadUsersAsync();
+                    //if (response == StatusCodes.Status200OK)
+                    //{
+                    //    MessageBox.Show("Usuario actualizado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    //    ClearInputs();
+                    //    await LoadUsersAsync();
+                    //}
+                    //else
+                    //{
+                    //    MessageBox.Show($"Ocurrió un error al actualizar el usuario: {response.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //}
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(
-                            $"Ocurrio un error al actualizar el usuario {ex.Message}",
-                            "Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error
-                        );
+                    MessageBox.Show($"Ocurrió un error al actualizar el usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
-                MessageBox.Show(
-                    "Seleccione un usuario para actualizar",
-                    "Advertencia",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+                MessageBox.Show("Seleccione un usuario para actualizar", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
 
         private void dgvRegistroUsuario_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -154,6 +151,8 @@ namespace Proyecto_nomina
         {
             txtNombre.Text = dto.Name;
             txtEmail.Text = dto.Email;
+            txtContraseña.Text = dto.Password;
+            ckAdmin.Checked = dto.IsAdmin;
         }
 
         private async void btnEliminar_Click(object sender, EventArgs e)

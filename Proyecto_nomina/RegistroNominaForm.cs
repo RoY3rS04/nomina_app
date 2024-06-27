@@ -66,7 +66,7 @@ namespace Proyecto_nomina
             {
                 var response = await _apiClient.Nominas.GetAllAsync();
                 _nominas = response.Data.ToList();
-
+                dgvRegistroNomina.DefaultCellStyle.ForeColor = Color.Black;
                 dgvRegistroNomina.DataSource = await MapNominas(_nominas);
 
             }

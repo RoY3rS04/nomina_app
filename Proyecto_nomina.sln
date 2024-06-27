@@ -5,9 +5,9 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proyecto_nomina", "Proyecto_nomina\Proyecto_nomina.csproj", "{F1F59268-9954-42FC-8850-14CE32D24137}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedModels", "SharedModels\SharedModels.csproj", "{81D70945-C13B-4F21-81D1-546BBE0B392F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedModels", "SharedModels\SharedModels.csproj", "{81D70945-C13B-4F21-81D1-546BBE0B392F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NominaAPI", "NominaAPI\NominaAPI.csproj", "{5A4BAF77-6240-43B0-865E-EB9BC32D6A8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NominaAPI", "NominaAPI\NominaAPI.csproj", "{5A4BAF77-6240-43B0-865E-EB9BC32D6A8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
