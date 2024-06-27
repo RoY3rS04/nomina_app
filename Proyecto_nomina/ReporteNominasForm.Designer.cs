@@ -35,6 +35,7 @@
             dtpFecha = new DateTimePicker();
             btnSearch = new Button();
             checkTodos = new CheckBox();
+            btnExport = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvReporteNominas).BeginInit();
             SuspendLayout();
             // 
@@ -102,11 +103,22 @@
             checkTodos.UseVisualStyleBackColor = true;
             checkTodos.CheckedChanged += checkTodos_CheckedChanged;
             // 
+            // btnExport
+            // 
+            btnExport.Location = new Point(30, 400);
+            btnExport.Name = "btnExport";
+            btnExport.Size = new Size(699, 33);
+            btnExport.TabIndex = 9;
+            btnExport.Text = "Exportar Nominas";
+            btnExport.UseVisualStyleBackColor = true;
+            btnExport.Click += btnExport_Click;
+            // 
             // ReporteNominasForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(764, 453);
+            Controls.Add(btnExport);
             Controls.Add(checkTodos);
             Controls.Add(btnSearch);
             Controls.Add(dtpFecha);
@@ -131,5 +143,6 @@
         private DateTimePicker dtpFecha;
         private Button btnSearch;
         private CheckBox checkTodos;
+        private Button btnExport;
     }
 }

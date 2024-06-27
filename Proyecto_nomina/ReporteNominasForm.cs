@@ -1,4 +1,5 @@
-﻿using NominaAPI.Http.Responses;
+﻿using IronXL;
+using NominaAPI.Http.Responses;
 using SharedModels;
 using SharedModels.DTOs.Empleado;
 using SharedModels.DTOs.Nomina;
@@ -147,6 +148,98 @@ namespace Proyecto_nomina
             }
 
             return nominaInfos;
+        }
+
+
+        private string ConvertToCellAddress(int row, int column)
+        {
+            // Columns in Excel are labeled as A, B, C, ..., Z, AA, AB, ..., etc.
+            // The following code converts a column index to this format.
+            string columnLabel = "";
+            while (column >= 0)
+            {
+                columnLabel = (char)('A' + column % 26) + columnLabel;
+                column = column / 26 - 1;
+            }
+            // Rows in Excel are labeled as 1, 2, 3, ..., n
+            // Adding 1 because Excel is 1-based and our loop is 0-based.
+            string rowLabel = (row + 1).ToString();
+            return columnLabel + rowLabel;
+        }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            DialogResult result;
+            string dirPath;
+
+            using (var dirChooser = new FolderBrowserDialog())
+            {
+                result = dirChooser.ShowDialog();
+
+                dirPath = dirChooser.SelectedPath;
+            }
+
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(dirPath))
+            {
+                MessageBox.Show(
+                    "Carpeta Invalida",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+
+                return;
+            }
+
+
+            WorkBook workBook = new WorkBook();
+            WorkSheet workSheet = workBook.CreateWorkSheet("nominas");
+
+            try
+            {
+                for (int i = 0; i < dgvReporteNominas.Columns.Count; i++)
+                {
+                    string cellAddress = ConvertToCellAddress(0, i);
+
+                    workSheet[cellAddress].Value = dgvReporteNominas.Columns[i].HeaderText;
+                }
+
+
+                for (int i = 0; i < dgvReporteNominas.Rows.Count; i++)
+                {
+                    for (int j = 0; j < dgvReporteNominas.Columns.Count; j++)
+                    {
+                        // Convert row and column index to Excel cell address format
+                        string cellAddress = ConvertToCellAddress(i + 1, j);
+
+                        workSheet[cellAddress].Value = dgvReporteNominas.Rows[i].Cells[j].Value?.ToString();
+                    }
+                }
+
+                workBook.SaveAs($"{dirPath}/nominas.xlsx");
+
+                MessageBox.Show(
+                    "Nominas exportadas correctamente!",
+                    "Success",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Hubo un error al exportar las nominas {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
     }
 }

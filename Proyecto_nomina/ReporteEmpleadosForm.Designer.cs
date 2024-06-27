@@ -34,6 +34,7 @@
             txtCodigoEmpleado = new TextBox();
             txtCedulaEmpleado = new TextBox();
             btnSearch = new Button();
+            btnExport = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvReporteEmpleados).BeginInit();
             SuspendLayout();
             // 
@@ -87,11 +88,22 @@
             btnSearch.UseVisualStyleBackColor = true;
             btnSearch.Click += btnSearch_Click;
             // 
+            // btnExport
+            // 
+            btnExport.Location = new Point(30, 394);
+            btnExport.Name = "btnExport";
+            btnExport.Size = new Size(699, 34);
+            btnExport.TabIndex = 7;
+            btnExport.Text = "Exportar";
+            btnExport.UseVisualStyleBackColor = true;
+            btnExport.Click += btnExport_Click;
+            // 
             // ReporteEmpleadosForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(764, 453);
+            Controls.Add(btnExport);
             Controls.Add(btnSearch);
             Controls.Add(txtCedulaEmpleado);
             Controls.Add(txtCodigoEmpleado);
@@ -114,5 +126,6 @@
         private TextBox txtCodigoEmpleado;
         private TextBox txtCedulaEmpleado;
         private Button btnSearch;
+        private Button btnExport;
     }
 }
