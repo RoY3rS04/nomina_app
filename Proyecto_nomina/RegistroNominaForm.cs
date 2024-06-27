@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using NominaAPI.Http.Responses;
 using SharedModels;
 using SharedModels.DTOs.Deducciones;
@@ -30,11 +31,6 @@ namespace Proyecto_nomina
         {
             InitializeComponent();
             _apiClient = apiClient;
-        }
-
-        private void groupBox2_Enter(object sender, EventArgs e)
-        {
-
         }
 
         private async void RegistroNominaForm_Load(object sender, EventArgs e)
@@ -167,7 +163,18 @@ namespace Proyecto_nomina
 
                 var salarioBruto = calculator.GetSalarioBruto(nomina.Ingresos);
                 var totalDeducciones = calculator.GetDeducciones(nomina.Deducciones);
-
+                var diasExtras = nomina.Ingresos;
+                var horasExtras = nomina.Ingresos;
+                var riesgoLaboral = nomina.Ingresos;
+                var nocturnidad = nomina.Ingresos;
+                var viatico = nomina.Ingresos;
+                var depreciacion = nomina.Ingresos;
+                var comision = nomina.Ingresos;
+                var bonos = nomina.Ingresos;
+                var prestamo = nomina.Deducciones;
+                var anticipos = nomina.Deducciones;
+                var INSS = calculator.CalculoINSS(salarioBruto);
+                var IR = calculator.CalculoIR(salarioBruto);
                 NominaInfo nominaInfo = new NominaInfo
                 {
                     Id = nomina.Id,
@@ -177,7 +184,19 @@ namespace Proyecto_nomina
                     PrimerApellido = nomina.Empleado.PrimerApellido,
                     NumeroINSS = nomina.Empleado.NumeroINSS,
                     NumeroRUC = nomina.Empleado.NumeroRUC,
+                    DiasExtras = diasExtras.DiasExtras,
+                    HorasExtras = horasExtras.HorasExtras,
+                    RiesgoLaboral = riesgoLaboral.RiesgoLaboral,
+                    Nocturnidad = nocturnidad.Nocturnidad,
+                    Viatico = viatico.Viatico,
+                    Depreciacion = depreciacion.Depreciacion,
+                    Comision = comision.Comision,
+                    Bonos = bonos.Bonos,
                     SalarioBruto = salarioBruto,
+                    Prestamos = prestamo.Prestamos,
+                    Anticipos = anticipos.Anticipos,
+                    INSS = INSS,
+                    IR = IR,
                     TotalDeducciones = totalDeducciones,
                     SalarioNeto = salarioBruto - totalDeducciones,
                     FechaRealizacion = nomina.FechaRealizacion
@@ -311,7 +330,7 @@ namespace Proyecto_nomina
         private async void btnEliminar_Click(object sender, EventArgs e)
         {
 
-            if(_nominaId <= 0)
+            if (_nominaId <= 0)
             {
                 MessageBox.Show(
                     "Seleccione una nomina para eliminar",
@@ -335,7 +354,7 @@ namespace Proyecto_nomina
                     MessageBoxIcon.Question
                 );
 
-                if(result == DialogResult.Yes)
+                if (result == DialogResult.Yes)
                 {
                     await _apiClient.Nominas.DeleteAsync(_nominaId);
 
@@ -349,7 +368,8 @@ namespace Proyecto_nomina
                     await LoadNominasAsync();
                 }
 
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(
                     $"Ocurrio un error al eliminar la nomina, ingresos o deducciones {ex.Message}",
@@ -357,6 +377,26 @@ namespace Proyecto_nomina
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                 );
+            }
+        }
+
+        private void btnNvo_Click(object sender, EventArgs e)
+        {
+            cboCodigoEmpleado.SelectedIndex = -1;
+            txtSalarioOrdinario.Text = "";
+            txtViaticos.Text = "";
+            txtDepreciacion.Text = "";
+            txtComisiones.Text = "";
+            txtBonos.Text = "";
+            txtHorasExtras.Text = "";
+            txtDiasExtras.Text = "";
+            ckNocturnidad.Checked = false;
+            ckRiesgoLaboral.Checked = false;
+            txtPrestamos.Text = "";
+            txtAnticipos.Text = "";
+            foreach (DataGridViewRow row in dgvRegistroNomina.Rows)
+            {
+                row.Selected = false;
             }
         }
     }

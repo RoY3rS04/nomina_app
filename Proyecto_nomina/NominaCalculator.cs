@@ -42,12 +42,12 @@ namespace Proyecto_nomina
         }
 
 
-        private double CalculoINSS(double SalarioBruto)
+        public double CalculoINSS(double SalarioBruto)
         {
             return SalarioBruto * 0.07;
         }
 
-        private double CalculoIR(double SalarioBruto)
+        public double CalculoIR(double SalarioBruto)
         {
             double SalarioAnual = SalarioBruto * 12;
 

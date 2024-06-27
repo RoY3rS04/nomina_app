@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            btnNuevo = new Button();
+            btnGuardar = new Button();
             btnEliminar = new Button();
             btnActualizar = new Button();
-            btnGuardar = new Button();
+            btnNvo = new Button();
             panel2 = new Panel();
             groupBox1 = new GroupBox();
             txtCargo = new TextBox();
@@ -78,35 +78,35 @@
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(29, 34, 39);
-            panel1.Controls.Add(btnNuevo);
+            panel1.Controls.Add(btnGuardar);
             panel1.Controls.Add(btnEliminar);
             panel1.Controls.Add(btnActualizar);
-            panel1.Controls.Add(btnGuardar);
+            panel1.Controls.Add(btnNvo);
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
             panel1.Size = new Size(95, 492);
             panel1.TabIndex = 0;
             // 
-            // btnNuevo
+            // btnGuardar
             // 
-            btnNuevo.Cursor = Cursors.Hand;
-            btnNuevo.FlatAppearance.BorderSize = 0;
-            btnNuevo.FlatAppearance.MouseDownBackColor = Color.FromArgb(64, 69, 76);
-            btnNuevo.FlatAppearance.MouseOverBackColor = Color.FromArgb(38, 45, 53);
-            btnNuevo.FlatStyle = FlatStyle.Flat;
-            btnNuevo.Font = new Font("Segoe UI", 12F);
-            btnNuevo.ForeColor = Color.Silver;
-            btnNuevo.ImageAlign = ContentAlignment.MiddleLeft;
-            btnNuevo.Location = new Point(2, 11);
-            btnNuevo.Margin = new Padding(3, 2, 3, 2);
-            btnNuevo.Name = "btnNuevo";
-            btnNuevo.Size = new Size(93, 50);
-            btnNuevo.TabIndex = 35;
-            btnNuevo.Text = "Nuevo";
-            btnNuevo.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnNuevo.UseVisualStyleBackColor = true;
-            btnNuevo.Click += btnNuevo_Click;
+            btnGuardar.Cursor = Cursors.Hand;
+            btnGuardar.FlatAppearance.BorderSize = 0;
+            btnGuardar.FlatAppearance.MouseDownBackColor = Color.FromArgb(64, 69, 76);
+            btnGuardar.FlatAppearance.MouseOverBackColor = Color.FromArgb(38, 45, 53);
+            btnGuardar.FlatStyle = FlatStyle.Flat;
+            btnGuardar.Font = new Font("Segoe UI", 12F);
+            btnGuardar.ForeColor = Color.Silver;
+            btnGuardar.ImageAlign = ContentAlignment.MiddleLeft;
+            btnGuardar.Location = new Point(1, 58);
+            btnGuardar.Margin = new Padding(3, 2, 3, 2);
+            btnGuardar.Name = "btnGuardar";
+            btnGuardar.Size = new Size(93, 50);
+            btnGuardar.TabIndex = 35;
+            btnGuardar.Text = "Guardar";
+            btnGuardar.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnGuardar.UseVisualStyleBackColor = true;
+            btnGuardar.Click += btnNuevo_Click;
             // 
             // btnEliminar
             // 
@@ -118,7 +118,7 @@
             btnEliminar.Font = new Font("Segoe UI", 12F);
             btnEliminar.ForeColor = Color.Silver;
             btnEliminar.ImageAlign = ContentAlignment.MiddleLeft;
-            btnEliminar.Location = new Point(2, 168);
+            btnEliminar.Location = new Point(2, 172);
             btnEliminar.Margin = new Padding(3, 2, 3, 2);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(93, 50);
@@ -138,34 +138,35 @@
             btnActualizar.Font = new Font("Segoe UI", 12F);
             btnActualizar.ForeColor = Color.Silver;
             btnActualizar.ImageAlign = ContentAlignment.MiddleLeft;
-            btnActualizar.Location = new Point(2, 114);
+            btnActualizar.Location = new Point(2, 113);
             btnActualizar.Margin = new Padding(3, 2, 3, 2);
             btnActualizar.Name = "btnActualizar";
-            btnActualizar.Size = new Size(93, 50);
+            btnActualizar.Size = new Size(93, 48);
             btnActualizar.TabIndex = 33;
             btnActualizar.Text = "Actualizar";
             btnActualizar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnActualizar.UseVisualStyleBackColor = true;
             btnActualizar.Click += btnActualizar_Click;
             // 
-            // btnGuardar
+            // btnNvo
             // 
-            btnGuardar.Cursor = Cursors.Hand;
-            btnGuardar.FlatAppearance.BorderSize = 0;
-            btnGuardar.FlatAppearance.MouseDownBackColor = Color.FromArgb(64, 69, 76);
-            btnGuardar.FlatAppearance.MouseOverBackColor = Color.FromArgb(38, 45, 53);
-            btnGuardar.FlatStyle = FlatStyle.Flat;
-            btnGuardar.Font = new Font("Segoe UI", 12F);
-            btnGuardar.ForeColor = Color.Silver;
-            btnGuardar.ImageAlign = ContentAlignment.MiddleLeft;
-            btnGuardar.Location = new Point(2, 60);
-            btnGuardar.Margin = new Padding(3, 2, 3, 2);
-            btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new Size(93, 50);
-            btnGuardar.TabIndex = 32;
-            btnGuardar.Text = "Guardar";
-            btnGuardar.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnGuardar.UseVisualStyleBackColor = true;
+            btnNvo.Cursor = Cursors.Hand;
+            btnNvo.FlatAppearance.BorderSize = 0;
+            btnNvo.FlatAppearance.MouseDownBackColor = Color.FromArgb(64, 69, 76);
+            btnNvo.FlatAppearance.MouseOverBackColor = Color.FromArgb(38, 45, 53);
+            btnNvo.FlatStyle = FlatStyle.Flat;
+            btnNvo.Font = new Font("Segoe UI", 12F);
+            btnNvo.ForeColor = Color.Silver;
+            btnNvo.ImageAlign = ContentAlignment.MiddleLeft;
+            btnNvo.Location = new Point(3, 6);
+            btnNvo.Margin = new Padding(3, 2, 3, 2);
+            btnNvo.Name = "btnNvo";
+            btnNvo.Size = new Size(93, 50);
+            btnNvo.TabIndex = 32;
+            btnNvo.Text = "Nuevo";
+            btnNvo.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnNvo.UseVisualStyleBackColor = true;
+            btnNvo.Click += btnNvo_Click;
             // 
             // panel2
             // 
@@ -596,9 +597,9 @@
         private Panel panel1;
         private Button btnEliminar;
         private Button btnActualizar;
-        private Button btnGuardar;
+        private Button btnNvo;
         private Panel panel2;
-        private Button btnNuevo;
+        private Button btnGuardar;
         private GroupBox groupBox1;
         private TextBox txtSalarioOrdinario;
         private MaskedTextBox ntxtCelular;

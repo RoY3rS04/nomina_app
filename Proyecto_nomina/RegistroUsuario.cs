@@ -53,12 +53,13 @@ namespace Proyecto_nomina
 
         private UserDto GetValues()
         {
-            return new UserDto 
+            return new UserDto
             {
                 Name = txtNombre.Text.Trim(),
                 Email = txtEmail.Text.Trim(),
                 Password = txtContraseña.Text.Trim(),
-                IsAdmin = ckAdmin.Checked            };
+                IsAdmin = ckAdmin.Checked
+            };
         }
 
         private async Task LoadUsersAsync()
@@ -87,7 +88,7 @@ namespace Proyecto_nomina
                 {
                     control.Text = "";
                 }
-                ckAdmin.Checked = false;   
+                ckAdmin.Checked = false;
             }
         }
 
@@ -107,7 +108,7 @@ namespace Proyecto_nomina
                     Name = txtNombre.Text,
                     Email = txtEmail.Text,
                     IsAdmin = ckAdmin.Checked,
-                    NewPassword = txtContraseña.Text  
+                    NewPassword = txtContraseña.Text
                 };
 
                 try
@@ -215,6 +216,18 @@ namespace Proyecto_nomina
                     MessageBoxIcon.Warning
                 );
             }
+        }
+
+        private void btnNuevo_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in dgvRegistroUsuario.Rows)
+            {
+                row.Selected = false;
+            }
+            txtContraseña.Text = "";
+            txtEmail.Text = "";
+            txtNombre.Text = "";
+            ckAdmin.Checked = false;
         }
     }
 }

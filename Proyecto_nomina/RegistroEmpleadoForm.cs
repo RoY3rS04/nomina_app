@@ -212,7 +212,7 @@ namespace Proyecto_nomina
 
         private async void btnEliminar_Click(object sender, EventArgs e)
         {
-            if(dgvRegistroEmpleado.SelectedRows.Count > 0)
+            if (dgvRegistroEmpleado.SelectedRows.Count > 0)
             {
                 var selectedEmpleado = (EmpleadoDto)dgvRegistroEmpleado.SelectedRows[0].DataBoundItem;
 
@@ -223,13 +223,13 @@ namespace Proyecto_nomina
                     MessageBoxIcon.Question
                 );
 
-                if(result == DialogResult.Yes)
+                if (result == DialogResult.Yes)
                 {
                     try
                     {
                         var response = await _apiClient.Empleados.DeleteAsync(selectedEmpleado.Id);
 
-                        if(!response)
+                        if (!response)
                         {
                             MessageBox.Show(
                                 "Hubo un error al eliminar el empleado",
@@ -249,7 +249,8 @@ namespace Proyecto_nomina
                         );
 
                         await LoadEmpleadosAsync();
-                    } catch(Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         MessageBox.Show(
                             $"Error al eliminar empleado {ex.Message}",
@@ -259,7 +260,8 @@ namespace Proyecto_nomina
                         );
                     }
                 }
-            } else
+            }
+            else
             {
                 MessageBox.Show(
                     "Seleccione un empleado para eliminar",
@@ -267,6 +269,31 @@ namespace Proyecto_nomina
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning
                 );
+            }
+        }
+
+        private void btnNvo_Click(object sender, EventArgs e)
+        {
+            txtCodigoEmpleado.Text = "";
+            txtCedula.Text = "";
+            txtINSS.Text = "";
+            txtRUC.Text = "";
+            txtNombre.Text = "";
+            txtApellido.Text = "";
+            dtpFechaContratacion.Value = DateTime.Now;
+            rdbFemenino.Checked = false;
+            rdbMasculino.Checked = false;
+            cboEstadoCivil.TabIndex = 0;
+            txtDireccion.Text = "";
+            dtpFechaContratacion.Value = DateTime.Now;
+            dtpFechaTerminacion.Value = DateTime.Now;
+            txtCargo.Text = "";
+            cboEstado.TabIndex = 0;
+            mtxtTelefono.Text = string.Empty;
+            ntxtCelular.Text = string.Empty;
+            foreach (DataGridViewRow row in dgvRegistroEmpleado.Rows)
+            {
+                row.Selected = false;
             }
         }
     }

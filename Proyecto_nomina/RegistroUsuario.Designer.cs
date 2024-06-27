@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            ckAdmin = new CheckBox();
             dgvRegistroUsuario = new DataGridView();
             txtContraseña = new TextBox();
             txtEmail = new TextBox();
@@ -43,7 +44,6 @@
             btnEliminar = new Button();
             btnActualizar = new Button();
             btnGuardar = new Button();
-            ckAdmin = new CheckBox();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvRegistroUsuario).BeginInit();
             panel1.SuspendLayout();
@@ -68,6 +68,16 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Usuario";
+            // 
+            // ckAdmin
+            // 
+            ckAdmin.AutoSize = true;
+            ckAdmin.Location = new Point(19, 192);
+            ckAdmin.Name = "ckAdmin";
+            ckAdmin.Size = new Size(98, 19);
+            ckAdmin.TabIndex = 10;
+            ckAdmin.Text = "Administador";
+            ckAdmin.UseVisualStyleBackColor = true;
             // 
             // dgvRegistroUsuario
             // 
@@ -180,7 +190,7 @@
             btnNuevo.Font = new Font("Segoe UI", 12F);
             btnNuevo.ForeColor = Color.Silver;
             btnNuevo.ImageAlign = ContentAlignment.MiddleLeft;
-            btnNuevo.Location = new Point(2, 11);
+            btnNuevo.Location = new Point(2, 7);
             btnNuevo.Margin = new Padding(3, 2, 3, 2);
             btnNuevo.Name = "btnNuevo";
             btnNuevo.Size = new Size(93, 50);
@@ -188,6 +198,7 @@
             btnNuevo.Text = "Nuevo";
             btnNuevo.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnNuevo.UseVisualStyleBackColor = true;
+            btnNuevo.Click += btnNuevo_Click;
             // 
             // btnEliminar
             // 
@@ -239,7 +250,7 @@
             btnGuardar.Font = new Font("Segoe UI", 12F);
             btnGuardar.ForeColor = Color.Silver;
             btnGuardar.ImageAlign = ContentAlignment.MiddleLeft;
-            btnGuardar.Location = new Point(2, 60);
+            btnGuardar.Location = new Point(2, 58);
             btnGuardar.Margin = new Padding(3, 2, 3, 2);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(93, 50);
@@ -248,16 +259,6 @@
             btnGuardar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnGuardar.UseVisualStyleBackColor = true;
             btnGuardar.Click += btnGuardar_Click;
-            // 
-            // ckAdmin
-            // 
-            ckAdmin.AutoSize = true;
-            ckAdmin.Location = new Point(19, 192);
-            ckAdmin.Name = "ckAdmin";
-            ckAdmin.Size = new Size(98, 19);
-            ckAdmin.TabIndex = 10;
-            ckAdmin.Text = "Administador";
-            ckAdmin.UseVisualStyleBackColor = true;
             // 
             // RegistroUsuario
             // 

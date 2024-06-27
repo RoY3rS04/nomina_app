@@ -22,6 +22,7 @@ namespace NominaAPI.Controllers
             NominaRepository nominaRepository,
             Repository<Ingresos> ingresosRepository,
             Repository<Deducciones> deduccionesRepository,
+
             IMapper mapper
         )
         {
